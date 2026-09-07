@@ -1,0 +1,272 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import WorkCarouselModal from '../components/WorkCarouselModal';
+import { galleries } from '../data/work';
+import { site } from '../data/site';
+
+const total = galleries.reduce((n, g) => n + g.shots.length, 0);
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Projects',
+    url: `${site.url}/projects`,
+    about: 'GoHighLevel automation, funnel and social media marketing work',
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: galleries.length,
+      itemListElement: galleries.map((g, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'CreativeWork',
+          name: g.title,
+          description: g.blurb,
+          image: g.shots.map((s) => new URL(s.src, site.url).href),
+        },
+      })),
+    },
+  },
+];
+---
+
+<Base
+  title="Projects"
+  description="GoHighLevel automations, funnels and social media work by John Lloyd Mamauag. Open any card to page through screenshots of the real builds."
+  keywords={['GHL workflow examples', 'funnel screenshots', 'social media portfolio']}
+  schema={schema}
+>
+  <div class="projects-page">
+  <PageHeader
+    eyebrow="Selected work"
+    title="Real builds, real screenshots"
+    lead={`Three areas of work, ${total} pieces straight out of the accounts I built them in. Open a card to page through the gallery.`}
+  />
+
+  <ul class="grid">
+    {
+      galleries.map((g, i) => (
+        <li>
+          <Fragment>
+            {(() => {
+              const Tag = g.shots.length ? 'button' : 'div';
+              return (
+                <Tag
+                  class:list={['card', 'work', { 'work--empty': !g.shots.length }]}
+                  type={g.shots.length ? 'button' : undefined}
+                  data-gallery={g.shots.length ? g.id : undefined}
+                  style={`--delay:${i * 90}ms`}
+                >
+            <span class="work__shots" aria-hidden="true">
+              {g.shots.length ? (
+                g.shots.slice(0, 3).map((shot, n) => (
+                  <img src={shot.thumb} alt="" loading="lazy" decoding="async" style={`--n:${n}`} />
+                ))
+              ) : (
+                <span class="work__placeholder">
+                  <i class="ph ph-image-square" aria-hidden="true" />
+                </span>
+              )}
+            </span>
+
+            <span class="card-head">
+              <span class="badge-icon">
+                <i class={`ph ${g.icon}`} aria-hidden="true" />
+              </span>
+              <span>
+                <span class="work__title">{g.title}</span>
+                <span class="work__kind">{g.kind}</span>
+              </span>
+            </span>
+
+            <span class="work__blurb">{g.blurb}</span>
+
+            <span class="work__tags">
+              {g.highlights.map((h) => (
+                <span>{h}</span>
+              ))}
+            </span>
+
+            <span class="work__cta">
+              {g.shots.length ? (
+                <>
+                  <i class="ph-bold ph-images" aria-hidden="true" />
+                  View {g.shots.length} screenshots
+                  <i class="ph-bold ph-arrow-right work__arrow" aria-hidden="true" />
+                </>
+              ) : (
+                <>
+                  <i class="ph-bold ph-clock" aria-hidden="true" />
+                  Screenshots coming soon
+                </>
+              )}
+            </span>
+                </Tag>
+              );
+            })()}
+          </Fragment>
+        </li>
+      ))
+    }
+  </ul>
+
+  <section class="card cta reveal">
+    <p><strong>Want something like this running in your business?</strong></p>
+    <a class="btn" href="/contact"><i class="ph ph-paper-plane-tilt" aria-hidden="true"></i> Start a project</a>
+  </section>
+  </div>
+
+  <WorkCarouselModal
+    client:load
+    galleries={galleries.map((g) => ({ id: g.id, title: g.title, shots: g.shots }))}
+  />
+</Base>
+
+<style>
+  .grid {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    gap: 1.25rem;
+  }
+  .grid li { display: flex; }
+
+  .work {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: .85rem;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    padding: 1.25rem;
+  }
+
+  /* Fanned preview of the first three screenshots. */
+  .work__shots {
+    position: relative;
+    display: block;
+    height: 172px;
+    margin-bottom: .35rem;
+  }
+  .work__shots img {
+    position: absolute;
+    top: calc(var(--n) * 10px);
+    left: 50%;
+    width: 84%;
+    height: 148px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 10px;
+    border: 1px solid rgba(2, 51, 54, .22);
+    box-shadow: 0 10px 24px rgba(2, 51, 54, .22);
+    transform: translateX(-50%) rotate(calc((var(--n) - 1) * 3deg)) translateY(calc(var(--n) * -4px));
+    transform-origin: bottom center;
+    transition: transform .45s cubic-bezier(.2, .8, .3, 1);
+  }
+  .work__shots img:nth-child(1) { z-index: 1; }
+  .work__shots img:nth-child(2) { z-index: 2; }
+  .work__shots img:nth-child(3) { z-index: 3; }
+
+  .work:hover .work__shots img:nth-child(1) { transform: translateX(calc(-50% - 30px)) rotate(-6deg); }
+  .work:hover .work__shots img:nth-child(2) { transform: translateX(-50%) rotate(0deg) translateY(-8px); }
+  .work:hover .work__shots img:nth-child(3) { transform: translateX(calc(-50% + 30px)) rotate(6deg); }
+
+  .card-head { align-items: center; margin-bottom: 0; }
+  .work__title { display: block; font-size: 1.15rem; font-weight: 700; }
+  .work__kind { display: block; font-size: .8125rem; color: var(--text-dim); }
+
+  .work__blurb { color: var(--text-muted); font-size: .95rem; line-height: 1.6; }
+
+  /* A card with no screenshots yet is inert rather than a dead click target. */
+  .work--empty { cursor: default; }
+  .work--empty:hover { transform: none; box-shadow: none; }
+  .work--empty .work__cta { color: var(--text-dim); }
+  .work__placeholder {
+    position: absolute;
+    inset: 0 8%;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    border: 2px dashed var(--border-strong);
+    background: var(--surface-2);
+    color: var(--text-dim);
+    font-size: 2.2rem;
+  }
+
+  .work__tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .work__tags span {
+    padding: .3rem .7rem;
+    border-radius: 999px;
+    font-size: .78rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .work__cta {
+    margin-top: auto;
+    padding-top: .85rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .925rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .work__arrow { margin-left: auto; transition: transform .3s ease; }
+  .work:hover .work__arrow { transform: translateX(4px); }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+  }
+  .cta p { font-size: 1.05rem; }
+
+  /*
+   * On a desktop-sized window the whole page is sized to the viewport so a
+   * visitor sees all three cards without scrolling. Narrow or short windows
+   * fall back to normal document flow.
+   */
+  @media (min-width: 1041px) and (min-height: 660px) {
+    .projects-page {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: 1rem;
+      height: calc(100vh - 3.5rem);
+    }
+    .projects-page :global(.page-header) { padding-top: 0; gap: .35rem; }
+    .projects-page :global(.page-header h1) { font-size: clamp(1.9rem, 2.2vw + .9rem, 2.6rem); }
+    .projects-page :global(.page-header .lead) { font-size: 1rem; max-width: 78ch; }
+
+    .grid { min-height: 0; }
+    .grid li { min-height: 0; }
+    .work { height: 100%; min-height: 0; gap: .7rem; }
+
+    /* The preview soaks up whatever height is left over. */
+    .work__shots { flex: 1 1 auto; height: auto; min-height: 90px; margin-bottom: 0; }
+    .work__shots img { height: 88%; top: calc(var(--n) * 8px); }
+
+    .work__blurb {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-size: .9rem;
+    }
+    .work__tags { max-height: 4.4rem; overflow: hidden; }
+    .work__cta { padding-top: .65rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work__shots img, .work__arrow { transition: none; }
+  }
+</style>

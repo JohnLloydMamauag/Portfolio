@@ -1,0 +1,226 @@
+---
+import Base from '../layouts/Base.astro';
+import ToolsMarquee from '../components/ToolsMarquee.astro';
+import { site, services, projects } from '../data/site';
+
+const featured = projects.slice(0, 3);
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    name: site.name,
+    url: site.url,
+    email: `mailto:${site.email}`,
+    areaServed: 'Worldwide',
+    description: site.intro,
+    makesOffer: services.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.title, description: s.blurb },
+    })),
+  },
+];
+---
+
+<Base
+  title="John Lloyd Mamauag: AI Automation & GoHighLevel CRM Builder"
+  description="John Lloyd Mamauag builds AI automations, GoHighLevel CRM systems, fast websites and social media content that keep working long after the call ends."
+  keywords={['GHL automation', 'AI agent builder', 'funnel builder', 'CRM setup', 'Philippines']}
+  schema={schema}
+>
+  <section class="hero reveal" aria-labelledby="hero-title">
+    <p class="eyebrow">AI automation · GHL CRM · Web dev · SMM</p>
+    <h1 id="hero-title">{site.tagline}</h1>
+    <p class="hero__hook">{site.hook}</p>
+    <div class="hero__actions">
+      <a class="btn" href="/contact">
+        <i class="ph ph-paper-plane-tilt" aria-hidden="true"></i> Get in touch
+      </a>
+      <a class="btn btn--ghost" href="/projects">
+        <i class="ph ph-folder-open" aria-hidden="true"></i> See the work
+      </a>
+    </div>
+  </section>
+
+  <ToolsMarquee />
+
+  <div class="bento">
+    <a class="card card--wide reveal" href="/projects" style="--delay:60ms">
+      <i class="ph ph-arrow-up-right arrow-out" aria-hidden="true"></i>
+      <div class="card-head">
+        <span class="badge-icon"><i class="ph ph-folder" aria-hidden="true"></i></span>
+        <h2 class="card-title">Projects</h2>
+      </div>
+      <p class="card-note">Funnels, workflows and apps built to solve real problems.</p>
+      <ul class="mini-list">
+        {
+          featured.map((p) => (
+            <li>
+              <i class={`ph ${p.icon}`} aria-hidden="true"></i>
+              <span class="mini-list__title">{p.title}</span>
+              <span class="mini-list__kind">{p.kind}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </a>
+
+    <a class="card reveal" href="/about" style="--delay:120ms">
+      <i class="ph ph-arrow-up-right arrow-out" aria-hidden="true"></i>
+      <div class="card-head">
+        <span class="badge-icon"><i class="ph ph-user" aria-hidden="true"></i></span>
+        <h2 class="card-title">About</h2>
+      </div>
+      <p class="card-note">Who I am and how I work.</p>
+      <p class="card-body">
+        Part builder, part operator. I sit inside the business long enough to understand the process,
+        then automate the parts that shouldn't need a human.
+      </p>
+    </a>
+
+    <a class="card reveal" href="/services#ai" style="--delay:180ms">
+      <i class="ph ph-arrow-up-right arrow-out" aria-hidden="true"></i>
+      <div class="card-head">
+        <span class="badge-icon"><i class="ph ph-robot" aria-hidden="true"></i></span>
+        <h2 class="card-title">AI builds</h2>
+      </div>
+      <p class="card-note">Agents, RAG chatbots and the automations I run on them.</p>
+      <ul class="chips">
+        <li><i class="ph ph-sparkle" aria-hidden="true"></i> Lead qualifier</li>
+        <li><i class="ph ph-chat-teardrop-text" aria-hidden="true"></i> Booking bot</li>
+        <li><i class="ph ph-magnifying-glass" aria-hidden="true"></i> Knowledge search</li>
+        <li><i class="ph ph-flow-arrow" aria-hidden="true"></i> Workflow agent</li>
+        <li><i class="ph ph-envelope-simple" aria-hidden="true"></i> Inbox triage</li>
+      </ul>
+    </a>
+
+    <a class="card card--accent card--wide reveal" href="/services" style="--delay:120ms">
+      <i class="ph ph-arrow-up-right arrow-out" aria-hidden="true"></i>
+      <div class="card-head">
+        <span class="badge-icon"><i class="ph ph-stack" aria-hidden="true"></i></span>
+        <h2 class="card-title">Services</h2>
+      </div>
+      <p class="card-note">What I build for coaches, agencies and local brands.</p>
+      <ol class="numbered">
+        {
+          services.map((s) => (
+            <li>
+              <i class={`ph ${s.icon}`} aria-hidden="true"></i>
+              <span>{s.title}</span>
+              <em>{s.n}</em>
+            </li>
+          ))
+        }
+      </ol>
+    </a>
+
+  </div>
+
+  <section class="cta card reveal" aria-labelledby="cta-title">
+    <div>
+      <p class="eyebrow">Next step</p>
+      <h2 id="cta-title">Got a process that eats your week?</h2>
+      <p class="lead">Tell me what it looks like today. I'll tell you what it looks like automated.</p>
+    </div>
+    <a class="btn" href="/contact">
+      <i class="ph ph-calendar-check" aria-hidden="true"></i> Start a conversation
+    </a>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    gap: .75rem;
+    justify-items: start;
+    padding: 1.5rem .25rem .75rem;
+  }
+
+  /* Runs wide on one line at desktop widths, wrapping only when it must. */
+  .hero h1 { font-size: clamp(2.4rem, 5vw + .5rem, 4.4rem); max-width: 22ch; }
+
+  .hero__hook {
+    font-size: clamp(1.05rem, .45vw + .95rem, 1.25rem);
+    line-height: 1.6;
+    color: var(--text-muted);
+    max-width: 52ch;
+  }
+
+  .hero__actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: .35rem; }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .card--wide { grid-column: span 2; }
+  .card--accent { border-color: var(--border-strong); }
+
+  .card-body { margin-top: .9rem; color: var(--text-muted); font-size: .975rem; }
+
+  .mini-list, .chips, .numbered { list-style: none; padding: 0; margin-top: 1.1rem; display: grid; gap: .5rem; }
+
+  .mini-list li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: .7rem;
+    padding: .75rem .9rem;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+  }
+  .mini-list i { font-size: 1.25rem; color: var(--accent); }
+  .mini-list__title { font-weight: 600; }
+  .mini-list__kind { font-size: .85rem; color: var(--text-dim); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .45rem .8rem;
+    border-radius: 999px;
+    font-size: .875rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .chips i { color: var(--accent); }
+
+  .numbered li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: .7rem;
+    padding: .7rem .9rem;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    font-weight: 500;
+  }
+  .numbered i { font-size: 1.25rem; color: var(--accent); }
+  .numbered em { font-style: normal; color: var(--text-dim); font-size: .85rem; }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 2rem;
+  }
+  .cta .lead { margin-top: .4rem; }
+
+  @media (max-width: 1180px) {
+    .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card--wide { grid-column: span 2; }
+  }
+  @media (max-width: 860px) {
+    .hero { padding: .75rem .25rem .25rem; }
+    .hero__actions { width: 100%; }
+    .hero__actions .btn { flex: 1 1 auto; justify-content: center; }
+    .bento { grid-template-columns: 1fr; }
+    .card--wide { grid-column: auto; }
+  }
+</style>

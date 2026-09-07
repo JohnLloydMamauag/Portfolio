@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Page not found" description="That page does not exist. Head back to the homepage.">
+  <section class="card notfound reveal">
+    <i class="ph ph-compass-tool" aria-hidden="true"></i>
+    <h1>404, that page isn't here</h1>
+    <p class="lead">The link is broken or the page moved. Everything else is one click away.</p>
+    <a class="btn" href="/"><i class="ph ph-house" aria-hidden="true"></i> Back to home</a>
+  </section>
+</Base>
+
+<style>
+  .notfound { display: grid; justify-items: center; text-align: center; gap: 1rem; padding: 4rem 2rem; }
+  .notfound i { font-size: 3.5rem; color: var(--accent); }
+  .notfound h1 { font-size: clamp(1.9rem, 3vw + 1rem, 2.8rem); }
+</style>

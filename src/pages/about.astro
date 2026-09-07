@@ -1,0 +1,205 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { site } from '../data/site';
+
+const timeline = [
+  {
+    year: 'Now',
+    title: 'AI automation & systems builder',
+    text: 'Building AI agents, GoHighLevel systems and websites for coaches, agencies and local service brands.',
+    icon: 'ph-rocket-launch',
+  },
+  {
+    year: '2025',
+    title: 'Went all in on GoHighLevel',
+    text: 'Learned GHL end to end: pipelines, workflows, snapshots and the automations agencies resell.',
+    icon: 'ph-seal-check',
+  },
+  {
+    year: '2024',
+    title: 'Web development & SMM',
+    text: 'Shipped landing pages and ran content calendars, which is where the automation itch started.',
+    icon: 'ph-browsers',
+  },
+];
+
+const values = [
+  { icon: 'ph-eye', title: 'Plain language', text: 'No jargon walls. You get told what was built and why, in words you can repeat to your team.' },
+  { icon: 'ph-shield-check', title: 'Built to be handed over', text: 'Documented and labelled, so the system survives me leaving the project.' },
+  { icon: 'ph-timer', title: 'Fast, then correct', text: 'A working version early, then the polish, so you see progress instead of waiting on a big reveal.' },
+];
+
+const skills = [
+  'GoHighLevel', 'Workflow automation', 'AI agents & RAG', 'Zapier / Make',
+  'Astro & static sites', 'HTML · CSS · JS', 'Technical SEO', 'Notion systems',
+  'Canva & short-form creative', 'Content calendars', 'Copy structure', 'Analytics',
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: `About ${site.name}`,
+    url: `${site.url}/about`,
+    mainEntity: { '@type': 'Person', name: site.name, description: site.intro },
+  },
+];
+---
+
+<Base
+  title="About"
+  description="John Lloyd Mamauag is an AI automation specialist and GoHighLevel CRM builder who also handles web development and social media marketing."
+  keywords={['about John Lloyd Mamauag', 'GoHighLevel builder', 'AI engineer']}
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="About"
+    title="Part builder, part operator"
+    lead="I build the systems that keep working after the call ends: automations, CRMs and sites that run themselves."
+  />
+
+  <div class="split">
+    <article class="card reveal">
+      <div class="card-head">
+        <span class="badge-icon"><i class="ph ph-user" aria-hidden="true"></i></span>
+        <h2 class="card-title">The short version</h2>
+      </div>
+      <p>
+        I started out building websites and running social content, and kept running into the same wall: the
+        marketing worked, but the follow-up didn't. Leads came in and quietly died in an inbox.
+      </p>
+      <p>
+        So I learned the back end. Now I spend most of my time inside GoHighLevel and automation tools, wiring up
+        the part of the business nobody sees: the routing, the reminders, the reactivation, the AI that answers at
+        two in the morning.
+      </p>
+      <p>
+        The rule I build by is simple: if a person has to remember to do it, it will eventually not get done. So it
+        gets built once, and then it runs forever.
+      </p>
+      <p class="location"><i class="ph ph-map-pin" aria-hidden="true"></i> {site.location}</p>
+    </article>
+
+    <aside class="side">
+      <div class="card reveal" id="credentials" style="--delay:80ms">
+        <div class="card-head">
+          <span class="badge-icon"><i class="ph ph-seal-check" aria-hidden="true"></i></span>
+          <h2 class="card-title">Credentials</h2>
+        </div>
+        <ul class="creds">
+          <li><i class="ph-fill ph-medal" aria-hidden="true"></i> GoHighLevel builder and admin</li>
+          <li><i class="ph-fill ph-brain" aria-hidden="true"></i> Aspiring AI engineer</li>
+          <li><i class="ph-fill ph-code" aria-hidden="true"></i> Self-taught web developer</li>
+        </ul>
+      </div>
+
+      <section class="card reveal" aria-labelledby="skills-title" style="--delay:100ms">
+        <div class="card-head">
+          <span class="badge-icon"><i class="ph ph-toolbox" aria-hidden="true"></i></span>
+          <h2 class="card-title" id="skills-title">Skills</h2>
+        </div>
+        <ul class="skills">
+          {skills.map((s) => <li>{s}</li>)}
+        </ul>
+      </section>
+    </aside>
+  </div>
+
+  <section class="card reveal" aria-labelledby="timeline-title">
+    <div class="card-head">
+      <span class="badge-icon"><i class="ph ph-clock-counter-clockwise" aria-hidden="true"></i></span>
+      <h2 class="card-title" id="timeline-title">How I got here</h2>
+    </div>
+    <ol class="timeline">
+      {
+        timeline.map((t) => (
+          <li>
+            <i class={`ph ${t.icon}`} aria-hidden="true" />
+            <span class="timeline__year">{t.year}</span>
+            <h3>{t.title}</h3>
+            <p>{t.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="card reveal" aria-labelledby="values-title">
+    <div class="card-head">
+      <span class="badge-icon"><i class="ph ph-compass" aria-hidden="true"></i></span>
+      <h2 class="card-title" id="values-title">How I work</h2>
+    </div>
+    <ul class="values">
+      {
+        values.map((v) => (
+          <li>
+            <i class={`ph ${v.icon}`} aria-hidden="true" />
+            <div>
+              <h3>{v.title}</h3>
+              <p>{v.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .split { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 1.25rem; }
+  .side { display: grid; gap: 1.25rem; align-content: start; }
+
+  article p { margin-top: .9rem; color: var(--text-muted); font-size: 1rem; }
+  .location { display: flex; align-items: center; gap: .5rem; color: var(--accent); font-size: .925rem; margin-top: 1.2rem; }
+
+  .creds { list-style: none; padding: 0; display: grid; gap: .6rem; margin-top: .5rem; }
+  .creds li { display: flex; align-items: center; gap: .65rem; font-size: .975rem; }
+  .creds i { color: var(--accent); font-size: 1.3rem; }
+
+  .timeline {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+    gap: 1rem;
+  }
+  .timeline li {
+    padding: 1.2rem;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+  }
+  .timeline i { font-size: 1.7rem; color: var(--accent); }
+  .timeline__year { display: block; margin-top: .5rem; font-size: .8rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); }
+  .timeline h3 { font-size: 1.1rem; margin: .3rem 0 .4rem; }
+  .timeline p { font-size: .925rem; color: var(--text-muted); }
+
+  .values {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    gap: 1.25rem;
+  }
+  .values li { display: grid; grid-template-columns: auto 1fr; gap: .85rem; align-items: start; }
+  .values i { font-size: 1.5rem; color: var(--accent); }
+  .values h3 { font-size: 1.05rem; }
+  .values p { font-size: .925rem; color: var(--text-muted); margin-top: .2rem; }
+
+  .skills { list-style: none; padding: 0; margin-top: 1.1rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+  .skills li {
+    padding: .45rem .85rem;
+    border-radius: 999px;
+    font-size: .875rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 900px) {
+    .split { grid-template-columns: 1fr; }
+  }
+</style>

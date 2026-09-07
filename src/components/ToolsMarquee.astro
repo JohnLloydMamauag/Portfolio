@@ -1,0 +1,113 @@
+---
+import icons from '../data/brand-icons.json';
+import { tools } from '../data/site';
+
+type Icon = { body: string; vb: string };
+const brand = icons as Record<string, Icon>;
+
+// GoHighLevel has no open icon set entry, so it ships as a hand-built mark.
+const ghl = {
+  vb: '0 0 24 24',
+  body:
+    '<rect width="24" height="24" rx="6" fill="#17233F"/>' +
+    '<path d="M6 16.2 11.1 7a1.05 1.05 0 0 1 1.83 0L18 16.2h-3.05l-2.03-3.86-1.34 2.5h1.55l.72 1.36H6Z" fill="#38E0B9"/>',
+};
+
+const marks: Record<string, Icon> = { ...brand, ghl };
+// Rendered twice so the track can loop seamlessly.
+const track = [...tools, ...tools];
+---
+
+<section class="marquee card reveal" aria-labelledby="tools-heading">
+  <div class="marquee__label">
+    <p class="eyebrow">Daily drivers</p>
+    <h2 id="tools-heading" class="marquee__title">Tools I work with</h2>
+  </div>
+
+  <div class="marquee__viewport">
+    <ul class="marquee__track">
+      {
+        track.map((tool, i) => (
+          <li class="tool" aria-hidden={i >= tools.length ? 'true' : undefined}>
+            <span class="tool__icon">
+              <svg viewBox={marks[tool.id].vb} role="img" aria-label={`${tool.name} logo`} set:html={marks[tool.id].body} />
+            </span>
+            <span class="tool__name">{tool.name}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .marquee {
+    display: grid;
+    grid-template-columns: minmax(180px, 230px) minmax(0, 1fr);
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .marquee__title { font-size: 1.2rem; margin-top: .15rem; }
+
+  .marquee__viewport {
+    overflow: hidden;
+    position: relative;
+    padding-block: .35rem;
+    border-left: 1px solid var(--border);
+    padding-left: 1.5rem;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 92%, transparent);
+  }
+
+  .marquee__track {
+    display: flex;
+    align-items: center;
+    gap: 2.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: max-content;
+    animation: slide 34s linear infinite;
+    /* Runs continuously — hover and focus never pause it. */
+    animation-play-state: running !important;
+  }
+
+  @keyframes slide {
+    /* The track holds two identical halves, so -50% is one seamless lap. */
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+
+  .tool {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    white-space: nowrap;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: color .3s ease;
+  }
+  .tool:hover { color: var(--text); }
+
+  .tool__icon {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    flex: none;
+  }
+  .tool__icon :global(svg) { width: 100%; height: 100%; }
+
+  @media (max-width: 760px) {
+    .marquee { grid-template-columns: 1fr; gap: .9rem; }
+    .marquee__viewport { border-left: 0; padding-left: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track { animation: none; }
+    .marquee__viewport { overflow-x: auto; }
+  }
+</style>

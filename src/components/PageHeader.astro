@@ -1,0 +1,21 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead: string;
+}
+const { eyebrow, title, lead } = Astro.props;
+---
+
+<section class="page-header reveal">
+  <p class="eyebrow">{eyebrow}</p>
+  <h1>{title}</h1>
+  <p class="lead">{lead}</p>
+</section>
+
+<style>
+  /* Type sizes are unchanged; only the surrounding space is tightened. */
+  .page-header { padding: .35rem .25rem 0; display: grid; gap: .4rem; }
+  h1 { font-size: clamp(2.1rem, 3vw + 1rem, 3.2rem); }
+  .lead { max-width: 68ch; }
+</style>

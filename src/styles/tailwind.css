@@ -1,0 +1,4 @@
+/* Theme + utilities only — Preflight is deliberately omitted so Tailwind's
+   reset does not overwrite the site's existing hand-written design system. */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);

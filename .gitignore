@@ -1,0 +1,17 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# raw source media (processed copies live in public/work/)
+GHL workflows/
+GHLand SMM samples/
+bg rev.png
+
+# env / editor
+.env
+.env.*
+.DS_Store
+.vscode/

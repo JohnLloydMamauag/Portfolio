@@ -1,0 +1,230 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { services, process, site } from '../data/site';
+
+const anchors: Record<string, string> = {
+  '01': 'ai',
+  '02': 'ghl',
+  '03': 'web',
+  '04': 'smm',
+};
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Services',
+    itemListElement: services.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Service',
+        name: s.title,
+        description: s.blurb,
+        provider: { '@type': 'Person', name: site.name },
+        areaServed: 'Worldwide',
+      },
+    })),
+  },
+];
+---
+
+<Base
+  title="Services"
+  description="AI automation, GoHighLevel CRM builds, web development and social media marketing: the four services John Lloyd Mamauag offers, and exactly what each one includes."
+  keywords={['GHL CRM setup', 'automation consultant', 'landing page developer', 'social media manager']}
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="What I do"
+    title="Four services, one connected system"
+    lead="Most businesses buy these separately and end up with four tools that don't talk. I build them as one system."
+  />
+
+  <ul class="grid">
+    {
+      services.map((s, i) => (
+        <li class="card reveal" id={anchors[s.n]} style={`--delay:${i * 80}ms`}>
+          <span class="num" aria-hidden="true">
+            {s.n}
+          </span>
+          <div class="card-head">
+            <span class="badge-icon">
+              <i class={`ph ${s.icon}`} aria-hidden="true" />
+            </span>
+            <h2 class="service__title">{s.title}</h2>
+          </div>
+          <p class="service__blurb">{s.blurb}</p>
+          <ul class="points">
+            {s.points.map((p) => (
+              <li>
+                <i class="ph-bold ph-check" aria-hidden="true" /> {p}
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))
+    }
+  </ul>
+
+  <section class="card reveal process-card" aria-labelledby="process-title">
+    <div class="card-head">
+      <span class="badge-icon"><i class="ph ph-path" aria-hidden="true"></i></span>
+      <h2 class="card-title" id="process-title">How a build runs</h2>
+    </div>
+    <p class="card-note">Same four steps every time.</p>
+    <ol class="process">
+      {
+        process.map((p, i) => (
+          <li style={`--i:${i}`}>
+            <span class="process__top">
+              <i class={`ph ${p.icon}`} aria-hidden="true" />
+              <span class="process__n">{p.n}</span>
+            </span>
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="card cta reveal">
+    <div>
+      <p class="eyebrow">Pricing</p>
+      <h2>Scoped per project, quoted before anything starts</h2>
+      <p>You'll get a written scope, a fixed price and a timeline. No retainer required.</p>
+    </div>
+    <a class="btn" href="/contact"><i class="ph ph-note-pencil" aria-hidden="true"></i> Request a quote</a>
+  </section>
+</Base>
+
+<style>
+  .grid {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr));
+    gap: 1.25rem;
+  }
+
+  .num {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.4rem;
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--border-strong);
+  }
+
+  .service__title { font-size: 1.35rem; }
+  .service__blurb { margin-top: .9rem; color: var(--text-muted); font-size: .975rem; }
+
+  .points { list-style: none; padding: 0; margin-top: 1.1rem; display: grid; gap: .55rem; }
+  .points li { display: flex; align-items: flex-start; gap: .6rem; font-size: .95rem; }
+  .points i { color: var(--accent); margin-top: .35rem; flex: none; }
+
+  .process {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.4rem;
+    /* One card per step, laid out in a single landscape row. */
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .process li {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 1.15rem 1.35rem;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: transform .35s cubic-bezier(.2, .8, .3, 1), border-color .35s ease,
+      box-shadow .35s ease;
+  }
+
+  .process__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    margin-bottom: .9rem;
+  }
+
+  .process i {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex: none;
+    border-radius: 12px;
+    background: var(--g-900);
+    color: var(--g-100);
+    font-size: 1.4rem;
+    transform: scale(.5);
+    opacity: 0;
+  }
+
+  .process__n {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--border-strong);
+    letter-spacing: -.02em;
+  }
+
+  .process h3 { font-size: 1.1rem; }
+  .process p { margin-top: .4rem; font-size: .925rem; line-height: 1.55; color: var(--text-muted); }
+
+  /* Cards deal in one at a time once the section scrolls into view. */
+  .process-card.is-visible .process li {
+    animation: step-in .55s cubic-bezier(.2, .8, .3, 1) calc(var(--i) * .12s) forwards;
+  }
+  .process-card.is-visible .process i {
+    animation: icon-in .5s cubic-bezier(.34, 1.56, .64, 1) calc(.15s + var(--i) * .12s) forwards;
+  }
+
+  .process li:hover {
+    transform: translateY(-5px);
+    border-color: var(--border-strong);
+    box-shadow: 0 12px 26px rgba(2, 51, 54, .16);
+  }
+  .process li:hover i { animation: none; opacity: 1; transform: scale(1.08); transition: transform .3s ease; }
+  .process li:hover .process__n { color: var(--accent); transition: color .3s ease; }
+
+  @media (max-width: 1000px) {
+    .process { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 560px) {
+    .process { grid-template-columns: 1fr; }
+  }
+
+  @keyframes step-in {
+    to { opacity: 1; transform: none; }
+  }
+
+  @keyframes icon-in {
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .process li, .process i { opacity: 1; transform: none; animation: none !important; }
+  }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .cta h2 { font-size: 1.35rem; margin: .15rem 0 .25rem; }
+  .cta p { font-size: .95rem; color: var(--text-muted); }
+</style>

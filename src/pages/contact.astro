@@ -1,0 +1,254 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { site, services } from '../data/site';
+
+const faqs = [
+  {
+    q: 'What does a typical project cost?',
+    a: 'Everything is scoped and quoted per project after a short call. Small automations are a few days of work; a full GoHighLevel build with funnels and AI intake is a multi-week engagement.',
+  },
+  {
+    q: 'Do you work with businesses outside the Philippines?',
+    a: 'Yes. Most clients are remote. Calls get scheduled around your timezone and everything is handed over with recorded walkthroughs.',
+  },
+  {
+    q: 'Can you take over an existing GoHighLevel account?',
+    a: 'Often that is the job: auditing an account someone else set up, cleaning the pipelines and rebuilding the workflows that never fired.',
+  },
+  {
+    q: 'Do you offer ongoing support?',
+    a: 'Yes. You can take the system and run it yourself, or keep me on a monthly arrangement for changes, monitoring and new campaigns.',
+  },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: 'Contact',
+    url: `${site.url}/contact`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+
+<Base
+  title="Contact"
+  description="Start a project with John Lloyd Mamauag: AI automation, GoHighLevel CRM builds, websites and social media. Tell me the process you want fixed and get a written scope."
+  keywords={['hire GHL builder', 'automation quote', 'contact']}
+  schema={schema}
+>
+  <PageHeader
+    eyebrow="Contact"
+    title="Tell me what's eating your week"
+    lead="Describe the process as it works today, the messy version is fine. You'll get a written scope, a fixed price and a realistic timeline back."
+  />
+
+  <div class="split">
+    <section class="card reveal" aria-labelledby="form-title">
+      <div class="card-head">
+        <span class="badge-icon"><i class="ph ph-note-pencil" aria-hidden="true"></i></span>
+        <h2 class="card-title" id="form-title">Project brief</h2>
+      </div>
+
+      <form
+        class="form"
+        method="post"
+        action={`https://formsubmit.co/${site.email}`}
+        novalidate
+      >
+        <div class="field">
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required placeholder="Jane Dela Cruz" />
+        </div>
+
+        <div class="field">
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email" autocomplete="email" required placeholder="jane@business.com" />
+        </div>
+
+        <div class="field">
+          <label for="service">What do you need?</label>
+          <select id="service" name="service" required>
+            {services.map((s) => <option value={s.title}>{s.title}</option>)}
+            <option value="Not sure yet">Not sure yet, help me decide</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="message">What should it do?</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="6"
+            required
+            placeholder="Right now leads fill in a form and someone has to check it manually..."></textarea>
+        </div>
+
+        <p class="form__note" id="privacy-note">
+          <i class="ph ph-lock-simple" aria-hidden="true"></i>
+          Your details are only used to reply to this enquiry.
+        </p>
+
+        <button class="btn form__submit" type="submit">
+          <i class="ph ph-paper-plane-tilt" aria-hidden="true"></i> Send the brief
+        </button>
+      </form>
+    </section>
+
+    <aside class="side">
+      <div class="card reveal" style="--delay:80ms">
+        <div class="card-head">
+          <span class="badge-icon"><i class="ph ph-address-book" aria-hidden="true"></i></span>
+          <h2 class="card-title">Direct</h2>
+        </div>
+        <ul class="direct">
+          <li>
+            <i class="ph ph-envelope-simple" aria-hidden="true"></i>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </li>
+          <li>
+            <i class="ph ph-map-pin" aria-hidden="true"></i>
+            <span>{site.location}</span>
+          </li>
+          <li>
+            <i class="ph ph-clock" aria-hidden="true"></i>
+            <span>Replies within one business day</span>
+          </li>
+        </ul>
+        <div class="socials">
+          {
+            site.socials.map((s) => (
+              <a class="social" href={s.href} target="_blank" rel="noopener noreferrer">
+                <i class={`ph ${s.icon}`} aria-hidden="true" />
+                <span>{s.label}</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="card reveal" style="--delay:140ms">
+        <div class="card-head">
+          <span class="badge-icon"><i class="ph ph-list-checks" aria-hidden="true"></i></span>
+          <h2 class="card-title">What happens next</h2>
+        </div>
+        <ol class="steps">
+          <li>You send the brief.</li>
+          <li>We do a 30-minute call to map the process.</li>
+          <li>You get a written scope, price and timeline.</li>
+          <li>Build starts once you say go.</li>
+        </ol>
+      </div>
+    </aside>
+  </div>
+
+  <section class="card reveal" aria-labelledby="faq-title">
+    <div class="card-head">
+      <span class="badge-icon"><i class="ph ph-question" aria-hidden="true"></i></span>
+      <h2 class="card-title" id="faq-title">Common questions</h2>
+    </div>
+    <div class="faqs">
+      {
+        faqs.map((f) => (
+          <details class="faq">
+            <summary>
+              <span>{f.q}</span>
+              <i class="ph ph-caret-down" aria-hidden="true" />
+            </summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .split { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 1.25rem; }
+  .side { display: grid; gap: 1.25rem; align-content: start; }
+
+  .form { margin-top: 1.2rem; display: grid; gap: 1.1rem; }
+  .field { display: grid; gap: .45rem; }
+  label { font-weight: 600; font-size: .975rem; }
+
+  input, select, textarea {
+    font: inherit;
+    font-size: 1rem;
+    padding: .85rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-elevated);
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    transition: border-color .25s ease, box-shadow .25s ease;
+  }
+  textarea { resize: vertical; line-height: 1.65; }
+  input::placeholder, textarea::placeholder { color: var(--text-dim); }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--glow);
+  }
+  input:user-invalid, textarea:user-invalid { border-color: #e0796a; }
+
+  .form__note { display: flex; align-items: center; gap: .5rem; font-size: .875rem; color: var(--text-dim); }
+  .form__submit { justify-self: start; }
+
+  .direct { list-style: none; padding: 0; margin-top: .4rem; display: grid; gap: .7rem; }
+  .direct li { display: flex; align-items: center; gap: .65rem; font-size: .975rem; color: var(--text-muted); }
+  .direct i { font-size: 1.3rem; color: var(--accent); flex: none; }
+  .direct a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
+
+  .socials { margin-top: 1.2rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+  .social {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .5rem .9rem;
+    border-radius: 999px;
+    font-size: .875rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    transition: background-color .25s ease, color .25s ease;
+  }
+  .social:hover { background: var(--accent); color: var(--accent-ink); }
+
+  .steps { margin: .8rem 0 0 1.1rem; display: grid; gap: .5rem; color: var(--text-muted); font-size: .975rem; }
+  .steps li::marker { color: var(--accent); font-weight: 700; }
+
+  .faqs { margin-top: 1.1rem; display: grid; gap: .7rem; }
+  .faq {
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .faq summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    list-style: none;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary i { color: var(--accent); transition: transform .3s ease; flex: none; }
+  .faq[open] summary i { transform: rotate(180deg); }
+  .faq p { padding: 0 1.2rem 1.15rem; color: var(--text-muted); font-size: .95rem; }
+
+  @media (max-width: 900px) {
+    .split { grid-template-columns: 1fr; }
+  }
+</style>

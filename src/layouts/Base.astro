@@ -1,0 +1,145 @@
+---
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '@phosphor-icons/web/regular';
+import '@phosphor-icons/web/bold';
+import '@phosphor-icons/web/fill';
+import '../styles/tailwind.css';
+import '../styles/global.css';
+import Sidebar from '../components/Sidebar.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Overrides the auto-generated canonical path. */
+  canonical?: string;
+  keywords?: string[];
+  /** Extra JSON-LD blocks for this page. */
+  schema?: unknown[];
+}
+
+const { title, description, canonical, keywords = [], schema = [] } = Astro.props;
+
+const canonicalURL = new URL(canonical ?? Astro.url.pathname, Astro.site ?? site.url);
+const ogImage = new URL('/og-image.svg', Astro.site ?? site.url);
+const fullTitle = Astro.url.pathname === '/' ? title : `${title} | ${site.name}`;
+
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: site.url,
+  email: `mailto:${site.email}`,
+  jobTitle: 'AI Automation Specialist and GoHighLevel CRM Builder',
+  description: site.intro,
+  knowsAbout: [
+    'AI automation',
+    'GoHighLevel CRM',
+    'Marketing automation',
+    'Web development',
+    'Social media marketing',
+    'Chatbots and AI agents',
+  ],
+  sameAs: site.socials.map((s) => s.href),
+};
+
+const siteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: `${site.name} — Portfolio`,
+  url: site.url,
+  inLanguage: 'en',
+  author: { '@type': 'Person', name: site.name },
+};
+
+const jsonLd = [personSchema, siteSchema, ...schema];
+const keywordList = [
+  'John Lloyd Mamauag',
+  'AI automation',
+  'GoHighLevel builder',
+  'GHL CRM',
+  'web developer',
+  'social media marketing',
+  ...keywords,
+].join(', ');
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywordList} />
+    <meta name="author" content={site.name} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta name="theme-color" content="#121A1B" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="shell">
+      <Sidebar />
+      <main class="main" id="main">
+        <slot />
+      </main>
+    </div>
+
+    <script>
+      // Scroll reveal
+      const items = document.querySelectorAll<HTMLElement>('.reveal');
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        items.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+        );
+        items.forEach((el) => io.observe(el));
+      }
+
+      // Pointer-tracked card glow
+      document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+        card.addEventListener('pointermove', (e) => {
+          const r = card.getBoundingClientRect();
+          card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+          card.style.setProperty('--my', `${e.clientY - r.top}px`);
+        });
+      });
+
+    </script>
+  </body>
+</html>
