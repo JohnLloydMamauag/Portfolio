@@ -66,6 +66,13 @@ const schema = [
         action={`https://formsubmit.co/${site.email}`}
         novalidate
       >
+        <input type="hidden" name="_subject" value="New project brief from your portfolio" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        {/* Sends people to the site's own thank-you page, which offers the booking step. */}
+        <input type="hidden" name="_next" value={`${site.url}/thanks`} />
+        {/* Honeypot: bots fill this, humans never see it. */}
+        <input type="text" name="_honey" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true" />
         <div class="field">
           <label for="name">Your name</label>
           <input id="name" name="name" type="text" autocomplete="name" required placeholder="Jane Dela Cruz" />
@@ -106,6 +113,17 @@ const schema = [
     </section>
 
     <aside class="side">
+      <div class="card reveal book" style="--delay:60ms">
+        <div class="card-head">
+          <span class="badge-icon"><i class="ph ph-calendar-check" aria-hidden="true"></i></span>
+          <h2 class="card-title">Book a call</h2>
+        </div>
+        <p class="card-note">Skip the form and book a 30-minute one-on-one discovery call.</p>
+        <a class="btn book__btn" href={site.calendly} target="_blank" rel="noopener noreferrer">
+          <i class="ph ph-calendar-plus" aria-hidden="true"></i> See available times
+        </a>
+      </div>
+
       <div class="card reveal" style="--delay:80ms">
         <div class="card-head">
           <span class="badge-icon"><i class="ph ph-address-book" aria-hidden="true"></i></span>
@@ -144,7 +162,7 @@ const schema = [
         </div>
         <ol class="steps">
           <li>You send the brief.</li>
-          <li>We do a 30-minute call to map the process.</li>
+          <li>You book a 30-minute discovery call.</li>
           <li>You get a written scope, price and timeline.</li>
           <li>Build starts once you say go.</li>
         </ol>
@@ -221,6 +239,8 @@ const schema = [
     transition: background-color .25s ease, color .25s ease;
   }
   .social:hover { background: var(--accent); color: var(--accent-ink); }
+
+  .book__btn { margin-top: 1rem; width: 100%; justify-content: center; }
 
   .steps { margin: .8rem 0 0 1.1rem; display: grid; gap: .5rem; color: var(--text-muted); font-size: .975rem; }
   .steps li::marker { color: var(--accent); font-weight: 700; }

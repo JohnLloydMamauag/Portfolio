@@ -1,0 +1,105 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+
+// Colour params are a paid Calendly feature and break the embed on free plans.
+const calendlyUrl = `${site.calendly}?hide_gdpr_banner=1`;
+---
+
+<Base
+  title="Brief received"
+  description="Your project brief reached John Lloyd Mamauag. Book a 30-minute call to walk through it."
+  noindex
+>
+  <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" slot="head" />
+
+  <div class="thanks-page">
+    <section class="done reveal">
+      <p class="eyebrow">
+        <i class="ph-fill ph-check-circle done__icon" aria-hidden="true"></i> Brief received
+      </p>
+      <h1>Got it. Now let's talk it through.</h1>
+      <p class="done__lead">
+        I'll reply within one business day, or book a 30-minute discovery call and we'll talk sooner.
+      </p>
+    </section>
+
+    <section class="card book-card reveal" aria-labelledby="book-title">
+      <div class="card-head">
+        <span class="badge-icon"><i class="ph ph-calendar-check" aria-hidden="true"></i></span>
+        <h2 class="card-title" id="book-title">30-minute discovery call</h2>
+      </div>
+
+      <div class="book-card__body">
+        <ul class="book-facts">
+          <li><i class="ph ph-clock" aria-hidden="true"></i> 30 minutes, one on one</li>
+          <li><i class="ph ph-video-camera" aria-hidden="true"></i> Google Meet, link sent on booking</li>
+          <li><i class="ph ph-list-checks" aria-hidden="true"></i> We map your process and next steps</li>
+        </ul>
+
+        <div class="book-card__cta">
+          {/* Opens Calendly as a full-size overlay, so nothing has to scroll. */}
+          <button class="btn book-btn" type="button" data-calendly={calendlyUrl}>
+            <i class="ph ph-calendar-plus" aria-hidden="true"></i> See available times
+          </button>
+          <a class="book-link" href={site.calendly} target="_blank" rel="noopener noreferrer">
+            Or open the booking page in a new tab
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <p class="foot">
+      <a class="foot__home" href="/"><i class="ph ph-house" aria-hidden="true"></i> Back to home</a>
+    </p>
+  </div>
+
+  <script is:inline async src="https://assets.calendly.com/assets/external/widget.js"></script>
+
+  <script>
+    // The button falls back to a normal link until Calendly's script is ready.
+    document.querySelectorAll<HTMLButtonElement>('[data-calendly]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const url = btn.dataset.calendly!;
+        const Calendly = (window as any).Calendly;
+        if (Calendly?.initPopupWidget) Calendly.initPopupWidget({ url });
+        else window.open(url, '_blank', 'noopener');
+      });
+    });
+  </script>
+</Base>
+
+<style>
+  .thanks-page { display: grid; gap: .9rem; }
+
+  .done { display: grid; gap: .3rem; justify-items: start; padding: .35rem .25rem 0; }
+  .done__icon { color: var(--accent); font-size: 1.05rem; vertical-align: -2px; }
+  .done h1 { font-size: clamp(1.7rem, 2.1vw + .9rem, 2.35rem); }
+  .done__lead { color: var(--text-muted); font-size: 1.05rem; max-width: 74ch; }
+
+  .book-card__body {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .book-facts { list-style: none; padding: 0; display: grid; gap: .55rem; }
+  .book-facts li { display: flex; align-items: center; gap: .6rem; font-size: .975rem; }
+  .book-facts i { font-size: 1.25rem; color: var(--accent); flex: none; }
+
+  .book-card__cta { display: grid; justify-items: center; gap: .6rem; }
+  .book-btn { font-size: 1.05rem; padding: 1rem 1.9rem; }
+  .book-link { font-size: .85rem; color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px; }
+
+  .foot { padding: 0 .25rem; font-size: .9rem; }
+  .foot__home { display: inline-flex; align-items: center; gap: .4rem; color: var(--accent); font-weight: 600; }
+
+  @media (max-width: 720px) {
+    .book-card__body { flex-direction: column; align-items: stretch; }
+    .book-card__cta { justify-items: stretch; }
+    .book-btn { justify-content: center; }
+  }
+</style>

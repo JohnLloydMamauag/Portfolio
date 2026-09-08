@@ -8,7 +8,8 @@ export const site = {
   intro:
     'I build the systems that keep working after the call ends: AI automations that qualify leads, GoHighLevel CRMs that never drop a follow-up, websites that convert, and social content that feeds them all.',
   url: 'https://johnlloydmamauag.com',
-  email: 'hello@johnlloydmamauag.com',
+  email: 'mamauagjohnlloyd98@gmail.com',
+  calendly: 'https://calendly.com/mamauagjohnlloyd98/onboarding-call',
   location: 'Philippines · working with clients worldwide',
   socials: [
     { label: 'Facebook', href: 'https://facebook.com/', icon: 'ph-facebook-logo' },

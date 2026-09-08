@@ -19,9 +19,11 @@ interface Props {
   keywords?: string[];
   /** Extra JSON-LD blocks for this page. */
   schema?: unknown[];
+  /** Keeps a page out of search results (used for the post-submit thank-you). */
+  noindex?: boolean;
 }
 
-const { title, description, canonical, keywords = [], schema = [] } = Astro.props;
+const { title, description, canonical, keywords = [], schema = [], noindex = false } = Astro.props;
 
 const canonicalURL = new URL(canonical ?? Astro.url.pathname, Astro.site ?? site.url);
 const ogImage = new URL('/og-image.svg', Astro.site ?? site.url);
@@ -78,7 +80,10 @@ const keywordList = [
     <meta name="description" content={description} />
     <meta name="keywords" content={keywordList} />
     <meta name="author" content={site.name} />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta
+      name="robots"
+      content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'}
+    />
     <link rel="canonical" href={canonicalURL} />
 
     <meta property="og:type" content="website" />
@@ -100,6 +105,9 @@ const keywordList = [
 
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    {/* Pages can add their own <head> tags, e.g. a third-party stylesheet. */}
+    <slot name="head" />
   </head>
 
   <body>

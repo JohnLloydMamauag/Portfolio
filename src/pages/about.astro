@@ -59,51 +59,49 @@ const schema = [
     lead="I build the systems that keep working after the call ends: automations, CRMs and sites that run themselves."
   />
 
-  <div class="split">
-    <article class="card reveal">
+  <article class="card reveal story">
+    <div class="card-head">
+      <span class="badge-icon"><i class="ph ph-user" aria-hidden="true"></i></span>
+      <h2 class="card-title">The short version</h2>
+    </div>
+    <p>
+      I started out building websites and running social content, and kept running into the same wall: the
+      marketing worked, but the follow-up didn't. Leads came in and quietly died in an inbox.
+    </p>
+    <p>
+      So I learned the back end. Now I spend most of my time inside GoHighLevel and automation tools, wiring up
+      the part of the business nobody sees: the routing, the reminders, the reactivation, the AI that answers at
+      two in the morning.
+    </p>
+    <p>
+      The rule I build by is simple: if a person has to remember to do it, it will eventually not get done. So it
+      gets built once, and then it runs forever.
+    </p>
+    <p class="location"><i class="ph ph-map-pin" aria-hidden="true"></i> {site.location}</p>
+  </article>
+
+  <div class="pair">
+    <div class="card reveal" id="credentials" style="--delay:80ms">
       <div class="card-head">
-        <span class="badge-icon"><i class="ph ph-user" aria-hidden="true"></i></span>
-        <h2 class="card-title">The short version</h2>
+        <span class="badge-icon"><i class="ph ph-seal-check" aria-hidden="true"></i></span>
+        <h2 class="card-title">Credentials</h2>
       </div>
-      <p>
-        I started out building websites and running social content, and kept running into the same wall: the
-        marketing worked, but the follow-up didn't. Leads came in and quietly died in an inbox.
-      </p>
-      <p>
-        So I learned the back end. Now I spend most of my time inside GoHighLevel and automation tools, wiring up
-        the part of the business nobody sees: the routing, the reminders, the reactivation, the AI that answers at
-        two in the morning.
-      </p>
-      <p>
-        The rule I build by is simple: if a person has to remember to do it, it will eventually not get done. So it
-        gets built once, and then it runs forever.
-      </p>
-      <p class="location"><i class="ph ph-map-pin" aria-hidden="true"></i> {site.location}</p>
-    </article>
+      <ul class="creds">
+        <li><i class="ph-fill ph-medal" aria-hidden="true"></i> GoHighLevel builder and admin</li>
+        <li><i class="ph-fill ph-brain" aria-hidden="true"></i> Aspiring AI engineer</li>
+        <li><i class="ph-fill ph-code" aria-hidden="true"></i> Self-taught web developer</li>
+      </ul>
+    </div>
 
-    <aside class="side">
-      <div class="card reveal" id="credentials" style="--delay:80ms">
-        <div class="card-head">
-          <span class="badge-icon"><i class="ph ph-seal-check" aria-hidden="true"></i></span>
-          <h2 class="card-title">Credentials</h2>
-        </div>
-        <ul class="creds">
-          <li><i class="ph-fill ph-medal" aria-hidden="true"></i> GoHighLevel builder and admin</li>
-          <li><i class="ph-fill ph-brain" aria-hidden="true"></i> Aspiring AI engineer</li>
-          <li><i class="ph-fill ph-code" aria-hidden="true"></i> Self-taught web developer</li>
-        </ul>
+    <section class="card reveal" aria-labelledby="skills-title" style="--delay:100ms">
+      <div class="card-head">
+        <span class="badge-icon"><i class="ph ph-toolbox" aria-hidden="true"></i></span>
+        <h2 class="card-title" id="skills-title">Skills</h2>
       </div>
-
-      <section class="card reveal" aria-labelledby="skills-title" style="--delay:100ms">
-        <div class="card-head">
-          <span class="badge-icon"><i class="ph ph-toolbox" aria-hidden="true"></i></span>
-          <h2 class="card-title" id="skills-title">Skills</h2>
-        </div>
-        <ul class="skills">
-          {skills.map((s) => <li>{s}</li>)}
-        </ul>
-      </section>
-    </aside>
+      <ul class="skills">
+        {skills.map((s) => <li>{s}</li>)}
+      </ul>
+    </section>
   </div>
 
   <section class="card reveal" aria-labelledby="timeline-title">
@@ -147,13 +145,18 @@ const schema = [
 </Base>
 
 <style>
-  .split { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 1.25rem; }
-  .side { display: grid; gap: 1.25rem; align-content: start; }
+  /* Single column, running the full width of the card. */
+
+  .pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 1.25rem;
+  }
 
   article p { margin-top: .9rem; color: var(--text-muted); font-size: 1rem; }
-  .location { display: flex; align-items: center; gap: .5rem; color: var(--accent); font-size: .925rem; margin-top: 1.2rem; }
+  .location { display: flex; padding-top: .35rem; align-items: center; gap: .5rem; color: var(--accent); font-size: .925rem; margin-top: 1.2rem; }
 
-  .creds { list-style: none; padding: 0; display: grid; gap: .6rem; margin-top: .5rem; }
+  .creds { list-style: none; padding: 0; display: grid; gap: .85rem; margin-top: .9rem; }
   .creds li { display: flex; align-items: center; gap: .65rem; font-size: .975rem; }
   .creds i { color: var(--accent); font-size: 1.3rem; }
 
@@ -189,17 +192,17 @@ const schema = [
   .values h3 { font-size: 1.05rem; }
   .values p { font-size: .925rem; color: var(--text-muted); margin-top: .2rem; }
 
-  .skills { list-style: none; padding: 0; margin-top: 1.1rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+  .skills { list-style: none; padding: 0; margin-top: 1rem; display: flex; flex-wrap: wrap; gap: .4rem; }
+  /* Smaller chips so the Skills card sits closer in height to Credentials. */
   .skills li {
-    padding: .45rem .85rem;
+    padding: .3rem .7rem;
     border-radius: 999px;
-    font-size: .875rem;
+    font-size: .8rem;
     background: var(--surface-2);
     border: 1px solid var(--border);
     color: var(--text-muted);
   }
 
   @media (max-width: 900px) {
-    .split { grid-template-columns: 1fr; }
   }
 </style>

@@ -6,7 +6,8 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://johnlloydmamauag.com',
   trailingSlash: 'ignore',
-  integrations: [sitemap(), react()],
+  // /thanks is a post-submit page, not something to surface in search.
+  integrations: [sitemap({ filter: (page) => !page.includes('/thanks') }), react()],
   vite: { plugins: [tailwindcss()] },
   // Dev-only overlay; it never ships in a build, but it gets in the way locally.
   devToolbar: { enabled: false },
