@@ -1,21 +1,21 @@
 export const site = {
   name: 'John Lloyd Mamauag',
-  handle: '@johnlloydbuilds',
+  // Short form for the sidebar; `location` is the long version used on About and Contact.
+  base: 'Philippines · Remote',
   role: 'AI Automation · GHL CRM Builder · Web Dev · SMM',
   tagline: 'Build it once. Run it forever.',
   // Short line for the hero; `intro` stays the long version used for meta + About.
   hook: 'AI automations, GoHighLevel CRMs and websites that keep working long after the call ends.',
   intro:
-    'I build the systems that keep working after the call ends: AI automations that qualify leads, GoHighLevel CRMs that never drop a follow-up, websites that convert, and social content that feeds them all.',
+    'I build the systems that keep working after the call ends: automations that chase the follow-up, GoHighLevel CRMs that never drop a lead, websites that convert, and social content that feeds them all.',
   url: 'https://johnlloydmamauag.com',
   email: 'mamauagjohnlloyd98@gmail.com',
   calendly: 'https://calendly.com/mamauagjohnlloyd98/onboarding-call',
   location: 'Philippines · working with clients worldwide',
   socials: [
-    { label: 'Facebook', href: 'https://facebook.com/', icon: 'ph-facebook-logo' },
-    { label: 'LinkedIn', href: 'https://linkedin.com/', icon: 'ph-linkedin-logo' },
-    { label: 'Instagram', href: 'https://instagram.com/', icon: 'ph-instagram-logo' },
-    { label: 'GitHub', href: 'https://github.com/', icon: 'ph-github-logo' },
+    { label: 'Facebook', href: 'https://www.facebook.com/johnlloyd.mamauag', icon: 'ph-facebook-logo' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/john-lloyd-mamauag', icon: 'ph-linkedin-logo' },
+    { label: 'GitHub', href: 'https://github.com/JohnLloydMamauag', icon: 'ph-github-logo' },
   ],
 };
 
@@ -30,15 +30,15 @@ export const nav = [
 export const services = [
   {
     n: '01',
-    title: 'AI Automation',
-    icon: 'ph-robot',
+    title: 'Automation & Integrations',
+    icon: 'ph-plugs-connected',
     blurb:
-      'Agents and workflows that answer, qualify and route leads day and night, wired into the tools you already pay for.',
+      'Pipelines that move data between the tools you already pay for, so nothing gets retyped and nothing gets missed.',
     points: [
-      'AI lead qualification and booking bots',
-      'RAG chatbots trained on your own docs',
-      'Zapier / Make multi-app pipelines',
+      'Make and Zapier multi-app pipelines',
+      'Webhooks between forms, sheets and your CRM',
       'Automated reporting and recaps',
+      'Notion and Google Sheets as the back office',
     ],
   },
   {
@@ -79,69 +79,6 @@ export const services = [
       'Scheduling and community replies',
       'Paid social support and reporting',
     ],
-  },
-];
-
-export const projects = [
-  {
-    title: 'Coach Onboarding Engine',
-    kind: 'GHL Build · Automation',
-    year: '2026',
-    icon: 'ph-graduation-cap',
-    summary:
-      'End-to-end GoHighLevel snapshot for a coaching business: application form, AI qualification, calendar booking and a 21-day nurture that runs without a VA.',
-    stack: ['GoHighLevel', 'Zapier', 'OpenAI'],
-    result: 'Booked-call rate up, zero manual follow-up',
-  },
-  {
-    title: 'Agency Lead Router',
-    kind: 'AI Automation',
-    year: '2026',
-    icon: 'ph-git-branch',
-    summary:
-      'An AI intake agent that reads inbound messages across forms, DMs and email, scores them, and drops each lead into the right pipeline stage with a written summary.',
-    stack: ['Claude', 'Make', 'Notion'],
-    result: 'Response time cut from hours to seconds',
-  },
-  {
-    title: 'Local Services Funnel',
-    kind: 'Web Dev · Funnel',
-    year: '2025',
-    icon: 'ph-storefront',
-    summary:
-      'Coded landing page and quote funnel for a home-services brand, wired straight into GHL with call tracking and instant SMS confirmation.',
-    stack: ['Astro', 'GoHighLevel', 'Twilio'],
-    result: '98+ Lighthouse across the board',
-  },
-  {
-    title: 'Content Ops Dashboard',
-    kind: 'SMM · Ops',
-    year: '2025',
-    icon: 'ph-calendar-check',
-    summary:
-      'A Notion command centre for a social team: briefs, Canva templates, approvals and scheduling on one board, with weekly performance pulled in automatically.',
-    stack: ['Notion', 'Canva', 'Zapier'],
-    result: 'Publishing cadence doubled',
-  },
-  {
-    title: 'Knowledge Base Chatbot',
-    kind: 'AI Build',
-    year: '2025',
-    icon: 'ph-brain',
-    summary:
-      'A retrieval chatbot on top of an agency SOP library, so the team stops asking the same five questions in Slack.',
-    stack: ['RAG', 'Claude', 'VS Code'],
-    result: 'Internal support pings down sharply',
-  },
-  {
-    title: 'Reactivation Campaign Kit',
-    kind: 'GHL · Automation',
-    year: '2025',
-    icon: 'ph-arrows-clockwise',
-    summary:
-      'A drop-in database reactivation workflow: segmented SMS and email sequences with AI reply handling and automatic handoff to a human once intent shows up.',
-    stack: ['GoHighLevel', 'OpenAI'],
-    result: 'Dormant lists turned into booked calls',
   },
 ];
 
@@ -196,11 +133,12 @@ export const process = [
   },
 ];
 
-export const tools = [
+/** `logo` overrides the inline brand mark with a bitmap in public/logos/. */
+export const tools: { id: string; name: string; logo?: string }[] = [
   { id: 'notion', name: 'Notion' },
   { id: 'zapier', name: 'Zapier' },
-  { id: 'ghl', name: 'GoHighLevel' },
-  { id: 'canva', name: 'Canva' },
+  { id: 'ghl', name: 'GoHighLevel', logo: '/logos/ghl.png' },
+  { id: 'canva', name: 'Canva', logo: '/logos/canva.png' },
   { id: 'claude', name: 'Claude' },
   { id: 'openai', name: 'ChatGPT' },
   { id: 'vscode', name: 'VS Code' },

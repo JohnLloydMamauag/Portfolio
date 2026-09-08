@@ -8,20 +8,6 @@
       "height": 927
     },
     {
-      "src": "/work/ghl-automation/2-step-funnel-client-magnet-blueprint-optin.webp",
-      "thumb": "/work/ghl-automation/2-step-funnel-client-magnet-blueprint-optin-thumb.webp",
-      "caption": "2 Step Funnel - Client Magnet Blueprint — Optin",
-      "width": 1918,
-      "height": 927
-    },
-    {
-      "src": "/work/ghl-automation/2-step-funnel-client-magnet-blueprint-thank-you-page.webp",
-      "thumb": "/work/ghl-automation/2-step-funnel-client-magnet-blueprint-thank-you-page-thumb.webp",
-      "caption": "2 Step Funnel - Client Magnet Blueprint — Thank You Page",
-      "width": 1918,
-      "height": 797
-    },
-    {
       "src": "/work/ghl-automation/appointment-confirmation-reminder.webp",
       "thumb": "/work/ghl-automation/appointment-confirmation-reminder-thumb.webp",
       "caption": "Appointment Confirmation + Reminder",
@@ -69,13 +55,6 @@
       "caption": "Form Submit Automation",
       "width": 1918,
       "height": 927
-    },
-    {
-      "src": "/work/ghl-automation/ghl-2-step-funnel.webp",
-      "thumb": "/work/ghl-automation/ghl-2-step-funnel-thumb.webp",
-      "caption": "GHL 2 Step Funnel",
-      "width": 1918,
-      "height": 926
     },
     {
       "src": "/work/ghl-automation/ghl-automation.webp",
@@ -155,25 +134,11 @@
       "height": 926
     },
     {
-      "src": "/work/ghl-automation/order-form-funnel.webp",
-      "thumb": "/work/ghl-automation/order-form-funnel-thumb.webp",
-      "caption": "Order Form Funnel",
-      "width": 1918,
-      "height": 807
-    },
-    {
       "src": "/work/ghl-automation/oder-form-funnel-automation.webp",
       "thumb": "/work/ghl-automation/oder-form-funnel-automation-thumb.webp",
       "caption": "Order Form Funnel Automation",
       "width": 1918,
       "height": 926
-    },
-    {
-      "src": "/work/ghl-automation/payment-form-automation-live-product-form.webp",
-      "thumb": "/work/ghl-automation/payment-form-automation-live-product-form-thumb.webp",
-      "caption": "Payment Form Automation Live Product Form",
-      "width": 1918,
-      "height": 925
     },
     {
       "src": "/work/ghl-automation/stale-opportunity-automation.webp",
@@ -190,7 +155,43 @@
       "height": 926
     }
   ],
-  "funnel": [],
+  "funnel": [
+    {
+      "src": "/work/funnel/ghl-2-step-funnel.webp",
+      "thumb": "/work/funnel/ghl-2-step-funnel-thumb.webp",
+      "caption": "Two-Step Funnel Structure",
+      "width": 1918,
+      "height": 926
+    },
+    {
+      "src": "/work/funnel/2-step-funnel-client-magnet-blueprint-optin.webp",
+      "thumb": "/work/funnel/2-step-funnel-client-magnet-blueprint-optin-thumb.webp",
+      "caption": "Lead Magnet Opt-In Page",
+      "width": 1918,
+      "height": 927
+    },
+    {
+      "src": "/work/funnel/2-step-funnel-client-magnet-blueprint-thank-you-page.webp",
+      "thumb": "/work/funnel/2-step-funnel-client-magnet-blueprint-thank-you-page-thumb.webp",
+      "caption": "Funnel Thank-You Page",
+      "width": 1918,
+      "height": 797
+    },
+    {
+      "src": "/work/funnel/order-form-funnel.webp",
+      "thumb": "/work/funnel/order-form-funnel-thumb.webp",
+      "caption": "Order Form Checkout",
+      "width": 1918,
+      "height": 807
+    },
+    {
+      "src": "/work/funnel/payment-form-automation-live-product-form.webp",
+      "thumb": "/work/funnel/payment-form-automation-live-product-form-thumb.webp",
+      "caption": "Order Form Payment Build",
+      "width": 1918,
+      "height": 925
+    }
+  ],
   "smm": [
     {
       "src": "/work/smm/fb.webp",

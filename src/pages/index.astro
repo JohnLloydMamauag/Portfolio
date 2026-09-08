@@ -1,9 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import ToolsMarquee from '../components/ToolsMarquee.astro';
-import { site, services, projects } from '../data/site';
+import { site, services } from '../data/site';
+import { galleries } from '../data/work';
 
-const featured = projects.slice(0, 3);
+// Mirrors the Projects page so the two never drift apart.
+const featured = galleries;
 
 const schema = [
   {
@@ -25,21 +27,18 @@ const schema = [
 <Base
   title="John Lloyd Mamauag: AI Automation & GoHighLevel CRM Builder"
   description="John Lloyd Mamauag builds AI automations, GoHighLevel CRM systems, fast websites and social media content that keep working long after the call ends."
-  keywords={['GHL automation', 'AI agent builder', 'funnel builder', 'CRM setup', 'Philippines']}
+  keywords={['GHL automation', 'workflow automation', 'funnel builder', 'CRM setup', 'Philippines']}
   schema={schema}
 >
   <section class="hero reveal" aria-labelledby="hero-title">
     <p class="eyebrow">AI automation · GHL CRM · Web dev · SMM</p>
-    <h1 id="hero-title">{site.tagline}</h1>
-    <p class="hero__hook">{site.hook}</p>
-    <div class="hero__actions">
-      <a class="btn" href="/contact">
+    <div class="hero__title-row">
+      <h1 id="hero-title">{site.tagline}</h1>
+      <a class="btn hero__cta" href="/contact">
         <i class="ph ph-paper-plane-tilt" aria-hidden="true"></i> Get in touch
       </a>
-      <a class="btn btn--ghost" href="/projects">
-        <i class="ph ph-folder-open" aria-hidden="true"></i> See the work
-      </a>
     </div>
+    <p class="hero__hook">{site.hook}</p>
   </section>
 
   <ToolsMarquee />
@@ -51,7 +50,7 @@ const schema = [
         <span class="badge-icon"><i class="ph ph-folder" aria-hidden="true"></i></span>
         <h2 class="card-title">Projects</h2>
       </div>
-      <p class="card-note">Funnels, workflows and apps built to solve real problems.</p>
+      <p class="card-note">Automations, funnels and social content, straight out of the accounts I built them in.</p>
       <ul class="mini-list">
         {
           featured.map((p) => (
@@ -78,19 +77,19 @@ const schema = [
       </p>
     </a>
 
-    <a class="card reveal" href="/services#ai" style="--delay:180ms">
+    <a class="card reveal" href="/services#automation" style="--delay:180ms">
       <i class="ph ph-arrow-up-right arrow-out" aria-hidden="true"></i>
       <div class="card-head">
-        <span class="badge-icon"><i class="ph ph-robot" aria-hidden="true"></i></span>
-        <h2 class="card-title">AI builds</h2>
+        <span class="badge-icon"><i class="ph ph-plugs-connected" aria-hidden="true"></i></span>
+        <h2 class="card-title">Automation</h2>
       </div>
-      <p class="card-note">Agents, RAG chatbots and the automations I run on them.</p>
+      <p class="card-note">Pipelines that move data between the tools you already pay for.</p>
       <ul class="chips">
-        <li><i class="ph ph-sparkle" aria-hidden="true"></i> Lead qualifier</li>
-        <li><i class="ph ph-chat-teardrop-text" aria-hidden="true"></i> Booking bot</li>
-        <li><i class="ph ph-magnifying-glass" aria-hidden="true"></i> Knowledge search</li>
-        <li><i class="ph ph-flow-arrow" aria-hidden="true"></i> Workflow agent</li>
-        <li><i class="ph ph-envelope-simple" aria-hidden="true"></i> Inbox triage</li>
+        <li><i class="ph ph-flow-arrow" aria-hidden="true"></i> Make &amp; Zapier</li>
+        <li><i class="ph ph-webhooks-logo" aria-hidden="true"></i> Webhooks</li>
+        <li><i class="ph ph-table" aria-hidden="true"></i> Sheets &amp; Notion</li>
+        <li><i class="ph ph-envelope-simple" aria-hidden="true"></i> Email &amp; SMS</li>
+        <li><i class="ph ph-chart-line" aria-hidden="true"></i> Reporting</li>
       </ul>
     </a>
 
@@ -137,7 +136,7 @@ const schema = [
   }
 
   /* Runs wide on one line at desktop widths, wrapping only when it must. */
-  .hero h1 { font-size: clamp(2.4rem, 5vw + .5rem, 4.4rem); max-width: 22ch; }
+  .hero h1 { font-size: clamp(2rem, 3.4vw + .6rem, 3.4rem); max-width: 22ch; }
 
   .hero__hook {
     font-size: clamp(1.05rem, .45vw + .95rem, 1.25rem);
@@ -146,7 +145,15 @@ const schema = [
     max-width: 52ch;
   }
 
-  .hero__actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: .35rem; }
+  /* CTA rides on the title's own line, so it costs the hero no vertical space. */
+  .hero__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    width: 100%;
+  }
+  .hero__cta { flex: none; }
 
   .bento {
     display: grid;
@@ -218,8 +225,8 @@ const schema = [
   }
   @media (max-width: 860px) {
     .hero { padding: .75rem .25rem .25rem; }
-    .hero__actions { width: 100%; }
-    .hero__actions .btn { flex: 1 1 auto; justify-content: center; }
+    .hero__title-row { flex-direction: column; align-items: stretch; gap: .9rem; }
+    .hero__cta { justify-content: center; }
     .bento { grid-template-columns: 1fr; }
     .card--wide { grid-column: auto; }
   }

@@ -15,14 +15,26 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const SOURCES = [path.join(ROOT, 'GHL workflows'), path.join(ROOT, 'GHLand SMM samples')];
 const OUT_DIR = path.join(ROOT, 'public', 'work');
 
-/**
- * Category routing. The "GHL workflows" folder belongs to the GHL Automation
- * card in full — funnel screenshots living in it stay there rather than being
- * split out. Only the samples folder is sorted by filename.
- */
 const CATEGORIES = ['ghl-automation', 'funnel', 'smm'];
 
+/**
+ * Funnel pages, listed in the order the gallery should walk through them:
+ * the opt-in funnel front to back, then the paid order form.
+ *
+ * These are the pages themselves. The workflows that fire behind them
+ * ("... Automation") stay in the GHL Automation card, since those are
+ * workflow-builder screens, not funnel pages.
+ */
+const FUNNEL_ORDER = [
+  'GHL 2 Step Funnel.png',
+  '2 Step Funnel - Client Magnet Blueprint_Optin.png',
+  '2 Step Funnel - Client Magnet Blueprint_Thank You Page.png',
+  'Order Form Funnel.png',
+  'Payment Form Automation Live Product Form.png',
+];
+
 function categorise(folder, file) {
+  if (FUNNEL_ORDER.includes(file)) return 'funnel';
   if (/GHL workflows/i.test(folder)) return 'ghl-automation';
   if (/instagram|facebook|fb\.|linkedin|blog|cover|post/i.test(file)) return 'smm';
   return 'ghl-automation';
@@ -46,6 +58,11 @@ const CAPTIONS = {
   'GHL Automation of Email 1': 'GHL Email Automation',
   'Black and Lime Green Modern Fitness Coaching Instagram Post': 'Fitness Coaching Instagram Post',
   'Green Black Gym Fitness Facebook Cover': 'Gym Fitness Facebook Cover',
+  'GHL 2 Step Funnel': 'Two-Step Funnel Structure',
+  '2 Step Funnel - Client Magnet Blueprint_Optin': 'Lead Magnet Opt-In Page',
+  '2 Step Funnel - Client Magnet Blueprint_Thank You Page': 'Funnel Thank-You Page',
+  'Order Form Funnel': 'Order Form Checkout',
+  'Payment Form Automation Live Product Form': 'Order Form Payment Build',
 };
 
 function toCaption(file) {
@@ -114,6 +131,7 @@ for (const dir of SOURCES) {
       .toFile(path.join(catDir, `${slug}-thumb.webp`));
 
     buckets.get(id).push({
+      slug,
       src: `/work/${id}/${slug}.webp`,
       thumb: `/work/${id}/${slug}-thumb.webp`,
       caption: toCaption(file),
@@ -138,7 +156,17 @@ buckets.get('smm').push({
   height: 1280,
 });
 
-for (const shots of buckets.values()) shots.sort((a, b) => a.caption.localeCompare(b.caption));
+for (const [id, shots] of buckets) {
+  // The funnel gallery reads as a sequence, so it keeps FUNNEL_ORDER instead
+  // of being alphabetised like the others.
+  if (id === 'funnel') {
+    const rank = new Map(FUNNEL_ORDER.map((f, i) => [slugify(f), i]));
+    shots.sort((a, b) => rank.get(a.slug) - rank.get(b.slug));
+  } else {
+    shots.sort((a, b) => a.caption.localeCompare(b.caption));
+  }
+  for (const shot of shots) delete shot.slug;
+}
 
 const manifest = Object.fromEntries(buckets);
 await writeFile(path.join(ROOT, 'src', 'data', 'work.json'), JSON.stringify(manifest, null, 2));
