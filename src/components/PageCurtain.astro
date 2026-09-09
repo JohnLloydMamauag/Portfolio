@@ -1,0 +1,183 @@
+---
+/**
+ * Page transition curtain.
+ *
+ * Eight columns sweep down to cover the viewport, the destination page name
+ * fades in, the swap happens behind it, then the columns sweep back up in
+ * reverse order. Driven by the ClientRouter lifecycle rather than by link
+ * clicks, so the browser back button gets the same treatment.
+ *
+ * Persisted across swaps: without `transition:persist` the element would be
+ * replaced mid-animation and the reveal would never run.
+ */
+import { nav } from '../data/site';
+
+const COLUMNS = 8;
+
+/** Path to the label shown while covered. Longest match wins, so /thanks
+ *  does not fall through to Home. */
+const labels: Record<string, string> = Object.fromEntries(
+  nav.map((item) => [item.href, item.label])
+);
+labels['/thanks'] = 'Thank you';
+---
+
+<div class="curtain" aria-hidden="true" transition:persist data-labels={JSON.stringify(labels)}>
+  {Array.from({ length: COLUMNS }, (_, i) => <span class="curtain__col" style={`--i:${i}`} />)}
+  <span class="curtain__label"><span class="curtain__name">Home</span><span class="curtain__dot">.</span></span>
+</div>
+
+<style is:global>
+  .curtain {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: block;
+    pointer-events: none;
+    visibility: hidden;
+    --n: 8;
+    --cw: 12.5vw;
+    --cover: .48s;
+    --reveal: .52s;
+    --stagger: 38ms;
+  }
+
+  .curtain.is-on { visibility: visible; }
+
+  .curtain__col {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    left: calc(var(--i) * var(--cw));
+    /* The overlap hides the seam that subpixel rounding opens between columns. */
+    width: calc(var(--cw) + 1.5px);
+    background-color: var(--g-100);
+    background-image:
+      repeating-linear-gradient(0deg, rgba(2, 51, 54, .05) 0 1px, transparent 1px 4px),
+      linear-gradient(180deg, var(--g-100), var(--g-300));
+    transform: translateY(-101%);
+    will-change: transform;
+    transition: transform var(--cover) cubic-bezier(.72, 0, .22, 1);
+    transition-delay: calc(var(--i) * var(--stagger));
+  }
+
+  /* Dark edge on the leading side, so the sweep reads as a solid object. */
+  .curtain__col::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 2px;
+    background: var(--g-700);
+    opacity: .9;
+  }
+
+  .curtain.is-cover .curtain__col { transform: translateY(0); }
+
+  /* Held still while the page swaps underneath. */
+  .curtain.is-covered .curtain__col { transform: translateY(0); transition: none; }
+
+  .curtain.is-reveal .curtain__col {
+    transform: translateY(-101%);
+    transition: transform var(--reveal) cubic-bezier(.72, 0, .22, 1);
+    /* Reverse order on the way out, so it unwinds rather than repeating. */
+    transition-delay: calc((var(--n) - 1 - var(--i)) * var(--stagger));
+  }
+
+  .curtain__label {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--g-900);
+    font-weight: 600;
+    font-size: max(2.2rem, 5.6vw);
+    letter-spacing: -.045em;
+    line-height: .92;
+    opacity: 0;
+    transition: opacity .3s ease;
+    will-change: opacity;
+  }
+
+  .curtain.show-label .curtain__label { opacity: 1; }
+  .curtain__dot { color: var(--g-700); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .curtain { display: none !important; }
+  }
+</style>
+
+<script>
+  const COVER = 480; // columns finish sweeping down
+  const LABEL = 260; // page name fades in while they are still moving
+  const HOLD = 340; // beat on the covered screen before unwinding
+  const REVEAL = 520;
+  const TAIL = 60; // last column's stagger, plus a frame
+
+  const curtain = document.querySelector<HTMLElement>('.curtain');
+  const name = curtain?.querySelector<HTMLElement>('.curtain__name');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (curtain && name) {
+    const labels: Record<string, string> = JSON.parse(curtain.dataset.labels || '{}');
+    const timers: number[] = [];
+    const clear = () => {
+      timers.forEach(clearTimeout);
+      timers.length = 0;
+    };
+    const after = (ms: number, fn: () => void) => timers.push(window.setTimeout(fn, ms));
+    const state = (...on: string[]) => {
+      curtain.classList.remove('is-on', 'is-cover', 'is-covered', 'is-reveal', 'show-label');
+      on.forEach((c) => curtain.classList.add(c));
+    };
+
+    /** Longest matching prefix, so /projects wins over / for a nested path. */
+    const labelFor = (path: string) => {
+      const clean = path.replace(/\/$/, '') || '/';
+      if (labels[clean]) return labels[clean];
+      const match = Object.keys(labels)
+        .filter((href) => href !== '/' && clean.startsWith(href))
+        .sort((a, b) => b.length - a.length)[0];
+      return match ? labels[match] : 'Home';
+    };
+
+    document.addEventListener('astro:before-preparation', (event) => {
+      const e = event as Event & { to: URL; loader: () => Promise<void> };
+      if (reduced.matches) return;
+
+      clear();
+      name.textContent = labelFor(e.to.pathname);
+      state('is-on');
+
+      // Two frames so the browser paints the columns parked above the fold
+      // before the transition to translateY(0) is allowed to start.
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => curtain.classList.add('is-cover'))
+      );
+      after(LABEL, () => curtain.classList.add('show-label'));
+
+      // Hold the swap until the screen is actually covered, however fast the
+      // next page loads. A quick fetch must not swap in behind a moving curtain.
+      const load = e.loader;
+      e.loader = async () => {
+        await Promise.all([
+          load(),
+          new Promise((resolve) => after(COVER, () => resolve(null))),
+        ]);
+      };
+    });
+
+    document.addEventListener('astro:after-swap', () => {
+      if (reduced.matches) return;
+      state('is-on', 'is-covered', 'show-label');
+    });
+
+    document.addEventListener('astro:page-load', () => {
+      if (reduced.matches || !curtain.classList.contains('is-on')) return;
+      after(HOLD, () => state('is-on', 'is-reveal'));
+      after(HOLD + REVEAL + TAIL, () => state());
+    });
+  }
+</script>

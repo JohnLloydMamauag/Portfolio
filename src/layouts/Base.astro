@@ -8,7 +8,9 @@ import '@phosphor-icons/web/bold';
 import '@phosphor-icons/web/fill';
 import '../styles/tailwind.css';
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import Sidebar from '../components/Sidebar.astro';
+import PageCurtain from '../components/PageCurtain.astro';
 import { site } from '../data/site';
 
 interface Props {
@@ -105,11 +107,16 @@ const keywordList = [
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
+    {/* Client-side routing, so PageCurtain can cover the swap. */}
+    <ClientRouter />
+
     {/* Pages can add their own <head> tags, e.g. a third-party stylesheet. */}
     <slot name="head" />
   </head>
 
   <body>
+    <PageCurtain />
+
     <a class="skip-link" href="#main">Skip to main content</a>
     <div class="shell">
       <Sidebar />
@@ -119,34 +126,39 @@ const keywordList = [
     </div>
 
     <script>
-      // Scroll reveal
-      const items = document.querySelectorAll<HTMLElement>('.reveal');
-      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        items.forEach((el) => el.classList.add('is-visible'));
-      } else {
-        const io = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                io.unobserve(entry.target);
-              }
-            });
-          },
-          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
-        );
-        items.forEach((el) => io.observe(el));
+      // Re-run on every navigation: with the ClientRouter a module script is
+      // executed once, but each swap brings in a fresh set of elements.
+      function enhance() {
+        // Scroll reveal
+        const items = document.querySelectorAll<HTMLElement>('.reveal');
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          items.forEach((el) => el.classList.add('is-visible'));
+        } else {
+          const io = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('is-visible');
+                  io.unobserve(entry.target);
+                }
+              });
+            },
+            { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+          );
+          items.forEach((el) => io.observe(el));
+        }
+
+        // Pointer-tracked card glow
+        document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+          card.addEventListener('pointermove', (e) => {
+            const r = card.getBoundingClientRect();
+            card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+            card.style.setProperty('--my', `${e.clientY - r.top}px`);
+          });
+        });
       }
 
-      // Pointer-tracked card glow
-      document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
-        card.addEventListener('pointermove', (e) => {
-          const r = card.getBoundingClientRect();
-          card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-          card.style.setProperty('--my', `${e.clientY - r.top}px`);
-        });
-      });
-
+      document.addEventListener('astro:page-load', enhance);
     </script>
   </body>
 </html>

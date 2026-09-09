@@ -57,13 +57,16 @@ const calendlyUrl = `${site.calendly}?hide_gdpr_banner=1`;
   <script is:inline async src="https://assets.calendly.com/assets/external/widget.js"></script>
 
   <script>
-    // The button falls back to a normal link until Calendly's script is ready.
-    document.querySelectorAll<HTMLButtonElement>('[data-calendly]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const url = btn.dataset.calendly!;
-        const Calendly = (window as any).Calendly;
-        if (Calendly?.initPopupWidget) Calendly.initPopupWidget({ url });
-        else window.open(url, '_blank', 'noopener');
+    // Bound on every navigation, since the ClientRouter runs this module once.
+    document.addEventListener('astro:page-load', () => {
+      // The button falls back to a normal link until Calendly's script is ready.
+      document.querySelectorAll<HTMLButtonElement>('[data-calendly]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const url = btn.dataset.calendly!;
+          const Calendly = (window as any).Calendly;
+          if (Calendly?.initPopupWidget) Calendly.initPopupWidget({ url });
+          else window.open(url, '_blank', 'noopener');
+        });
       });
     });
   </script>
