@@ -12,10 +12,35 @@ import path from 'node:path';
 import sharp from 'sharp';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const SOURCES = [path.join(ROOT, 'GHL workflows'), path.join(ROOT, 'GHLand SMM samples')];
+const SOURCES = [
+  path.join(ROOT, 'GHL workflows'),
+  path.join(ROOT, 'New Workflow'),
+  path.join(ROOT, 'GHLand SMM samples'),
+];
 const OUT_DIR = path.join(ROOT, 'public', 'work');
 
 const CATEGORIES = ['ghl-automation', 'funnel', 'smm'];
+
+/**
+ * Re-shot workflows. "New Workflow" holds fresher captures of screens that
+ * already existed in "GHL workflows", so the old file is skipped wherever a
+ * replacement landed. Anything in the old folder that is NOT listed here has
+ * no new version and stays in the gallery.
+ */
+const SUPERSEDED = new Set([
+  '2 Step Funnel - Client Magnet Blueprint_Automation.png',
+  'Appointment Confirmation + Reminder.png',
+  'Ask for Review After 7 Days.png',
+  'Birthday Automation.png',
+  'Chat Widget Automation.png',
+  'Database Reactivation _Email FollowUp Past Client_Leads.png',
+  'Form Submit Automation.png',
+  'Missed Call Text Back Automation.png',
+  'New Leads Automation.png',
+  'Oder Form Funnel Automation.png',
+  'Stale Opportunity Automation.png',
+  'Won Clent Move to (Review) Pipeline.png',
+]);
 
 /**
  * Funnel pages, listed in the order the gallery should walk through them:
@@ -35,6 +60,7 @@ const FUNNEL_ORDER = [
 
 function categorise(folder, file) {
   if (FUNNEL_ORDER.includes(file)) return 'funnel';
+  if (/New Workflow/i.test(folder)) return 'ghl-automation';
   if (/GHL workflows/i.test(folder)) return 'ghl-automation';
   if (/instagram|facebook|fb\.|linkedin|blog|cover|post/i.test(file)) return 'smm';
   return 'ghl-automation';
@@ -63,13 +89,29 @@ const CAPTIONS = {
   '2 Step Funnel - Client Magnet Blueprint_Thank You Page': 'Funnel Thank-You Page',
   'Order Form Funnel': 'Order Form Checkout',
   'Payment Form Automation Live Product Form': 'Order Form Payment Build',
+  // Re-shot workflows: drop the date prefixes and the "Workflow" filing prefix.
+  '052925 Webinar - FB comment Automation': 'Webinar Facebook Comment Automation',
+  '061225 John Lloyd Cruz - FB & IG comment Automation': 'Facebook and Instagram Comment Automation',
+  '2 Step Funnel - Client Magnet Blueprint': 'Two-Step Funnel Automation',
+  'Database Reactivation Email FollowUp Past ClientLeads': 'Database Reactivation Email Follow-Up',
+  'Imitation': 'Form Submit to Opportunity Workflow',
+  'Won Client Move to CUSTOMERS Pipeline': 'Won Client Moved to Customers Pipeline',
+  'Workflow Form Submit Automation': 'Form Submit Automation',
+  'Workflow Missed Call Text Back Automation': 'Missed Call Text Back Automation',
+  'Workflow New Leads Automation': 'New Leads Automation',
+  'Workflow Stale Opportunity Automation': 'Stale Opportunity Automation',
 };
 
 function toCaption(file) {
-  const raw = path.basename(file, path.extname(file)).replace(/\s*\(\d+\)$/, '');
+  const raw = path
+    .basename(file, path.extname(file))
+    .replace(/\s*\(\d+\)$/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
   if (CAPTIONS[raw]) return CAPTIONS[raw];
-  let name = path.basename(file, path.extname(file));
-  name = name.replace(/[_]+/g, ' — ').replace(/\s*\(\d+\)$/, '').replace(/\s+/g, ' ').trim();
+  // Underscores separate clauses in the raw filenames; a comma reads better
+  // than a dash and keeps the captions free of em dashes.
+  let name = raw.replace(/[_]+/g, ', ').replace(/\s+/g, ' ').trim();
   for (const [from, to] of FIXES) name = name.replace(from, to);
   return name;
 }
@@ -107,7 +149,10 @@ for (const [key, buf] of stash) {
 const buckets = new Map(CATEGORIES.map((id) => [id, []]));
 
 for (const dir of SOURCES) {
-  const files = (await readdir(dir)).filter((f) => /\.(png|jpe?g|webp)$/i.test(f));
+  const isOldWorkflows = /GHL workflows/i.test(dir);
+  const files = (await readdir(dir))
+    .filter((f) => /\.(png|jpe?g|webp)$/i.test(f))
+    .filter((f) => !(isOldWorkflows && SUPERSEDED.has(f)));
   for (const file of files) {
     const id = categorise(dir, file);
     const slug = slugify(file);

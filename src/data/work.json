@@ -1,46 +1,39 @@
 {
   "ghl-automation": [
     {
-      "src": "/work/ghl-automation/2-step-funnel-client-magnet-blueprint-automation.webp",
-      "thumb": "/work/ghl-automation/2-step-funnel-client-magnet-blueprint-automation-thumb.webp",
-      "caption": "2 Step Funnel - Client Magnet Blueprint — Automation",
-      "width": 1918,
-      "height": 927
-    },
-    {
       "src": "/work/ghl-automation/appointment-confirmation-reminder.webp",
       "thumb": "/work/ghl-automation/appointment-confirmation-reminder-thumb.webp",
       "caption": "Appointment Confirmation + Reminder",
-      "width": 1918,
-      "height": 928
+      "width": 1277,
+      "height": 2984
     },
     {
       "src": "/work/ghl-automation/ask-for-review-after-7-days.webp",
       "thumb": "/work/ghl-automation/ask-for-review-after-7-days-thumb.webp",
       "caption": "Ask for Review After 7 Days",
-      "width": 1912,
-      "height": 927
+      "width": 1277,
+      "height": 2293
     },
     {
       "src": "/work/ghl-automation/birthday-automation.webp",
       "thumb": "/work/ghl-automation/birthday-automation-thumb.webp",
       "caption": "Birthday Automation",
-      "width": 1918,
-      "height": 927
+      "width": 1277,
+      "height": 1256
     },
     {
       "src": "/work/ghl-automation/chat-widget-automation.webp",
       "thumb": "/work/ghl-automation/chat-widget-automation-thumb.webp",
       "caption": "Chat Widget Automation",
-      "width": 1918,
-      "height": 926
+      "width": 1277,
+      "height": 2293
     },
     {
-      "src": "/work/ghl-automation/database-reactivation-email-followup-past-client-leads.webp",
-      "thumb": "/work/ghl-automation/database-reactivation-email-followup-past-client-leads-thumb.webp",
-      "caption": "Database Reactivation — Email Follow-Up Past Client — Leads",
-      "width": 1918,
-      "height": 926
+      "src": "/work/ghl-automation/database-reactivation-email-followup-past-clientleads.webp",
+      "thumb": "/work/ghl-automation/database-reactivation-email-followup-past-clientleads-thumb.webp",
+      "caption": "Database Reactivation Email Follow-Up",
+      "width": 3017,
+      "height": 5336
     },
     {
       "src": "/work/ghl-automation/email-automation-sample.webp",
@@ -50,11 +43,25 @@
       "height": 760
     },
     {
-      "src": "/work/ghl-automation/form-submit-automation.webp",
-      "thumb": "/work/ghl-automation/form-submit-automation-thumb.webp",
+      "src": "/work/ghl-automation/061225-john-lloyd-cruz-fb-ig-comment-automation.webp",
+      "thumb": "/work/ghl-automation/061225-john-lloyd-cruz-fb-ig-comment-automation-thumb.webp",
+      "caption": "Facebook and Instagram Comment Automation",
+      "width": 2411,
+      "height": 2984
+    },
+    {
+      "src": "/work/ghl-automation/workflow-form-submit-automation.webp",
+      "thumb": "/work/ghl-automation/workflow-form-submit-automation-thumb.webp",
       "caption": "Form Submit Automation",
-      "width": 1918,
-      "height": 927
+      "width": 1277,
+      "height": 2639
+    },
+    {
+      "src": "/work/ghl-automation/imitation.webp",
+      "thumb": "/work/ghl-automation/imitation-thumb.webp",
+      "caption": "Form Submit to Opportunity Workflow",
+      "width": 1277,
+      "height": 1947
     },
     {
       "src": "/work/ghl-automation/ghl-automation.webp",
@@ -113,18 +120,18 @@
       "height": 931
     },
     {
-      "src": "/work/ghl-automation/missed-call-text-back-automation.webp",
-      "thumb": "/work/ghl-automation/missed-call-text-back-automation-thumb.webp",
+      "src": "/work/ghl-automation/workflow-missed-call-text-back-automation.webp",
+      "thumb": "/work/ghl-automation/workflow-missed-call-text-back-automation-thumb.webp",
       "caption": "Missed Call Text Back Automation",
-      "width": 1918,
-      "height": 927
+      "width": 1277,
+      "height": 1947
     },
     {
-      "src": "/work/ghl-automation/new-leads-automation.webp",
-      "thumb": "/work/ghl-automation/new-leads-automation-thumb.webp",
+      "src": "/work/ghl-automation/workflow-new-leads-automation.webp",
+      "thumb": "/work/ghl-automation/workflow-new-leads-automation-thumb.webp",
       "caption": "New Leads Automation",
-      "width": 1918,
-      "height": 927
+      "width": 2378,
+      "height": 4712
     },
     {
       "src": "/work/ghl-automation/opportunities-pipeline.webp",
@@ -134,25 +141,46 @@
       "height": 926
     },
     {
-      "src": "/work/ghl-automation/oder-form-funnel-automation.webp",
-      "thumb": "/work/ghl-automation/oder-form-funnel-automation-thumb.webp",
+      "src": "/work/ghl-automation/order-form-funnel-automation.webp",
+      "thumb": "/work/ghl-automation/order-form-funnel-automation-thumb.webp",
       "caption": "Order Form Funnel Automation",
-      "width": 1918,
-      "height": 926
+      "width": 1277,
+      "height": 1947
     },
     {
-      "src": "/work/ghl-automation/stale-opportunity-automation.webp",
-      "thumb": "/work/ghl-automation/stale-opportunity-automation-thumb.webp",
+      "src": "/work/ghl-automation/payment-form-automation.webp",
+      "thumb": "/work/ghl-automation/payment-form-automation-thumb.webp",
+      "caption": "Payment Form Automation",
+      "width": 1277,
+      "height": 2293
+    },
+    {
+      "src": "/work/ghl-automation/workflow-stale-opportunity-automation.webp",
+      "thumb": "/work/ghl-automation/workflow-stale-opportunity-automation-thumb.webp",
       "caption": "Stale Opportunity Automation",
-      "width": 1918,
-      "height": 926
+      "width": 1277,
+      "height": 1256
     },
     {
-      "src": "/work/ghl-automation/won-clent-move-to-review-pipeline.webp",
-      "thumb": "/work/ghl-automation/won-clent-move-to-review-pipeline-thumb.webp",
-      "caption": "Won Client Move to (Review) Pipeline",
-      "width": 1918,
-      "height": 926
+      "src": "/work/ghl-automation/2-step-funnel-client-magnet-blueprint.webp",
+      "thumb": "/work/ghl-automation/2-step-funnel-client-magnet-blueprint-thumb.webp",
+      "caption": "Two-Step Funnel Automation",
+      "width": 1277,
+      "height": 1602
+    },
+    {
+      "src": "/work/ghl-automation/052925-webinar-fb-comment-automation.webp",
+      "thumb": "/work/ghl-automation/052925-webinar-fb-comment-automation-thumb.webp",
+      "caption": "Webinar Facebook Comment Automation",
+      "width": 2411,
+      "height": 2984
+    },
+    {
+      "src": "/work/ghl-automation/won-client-move-to-customers-pipeline.webp",
+      "thumb": "/work/ghl-automation/won-client-move-to-customers-pipeline-thumb.webp",
+      "caption": "Won Client Moved to Customers Pipeline",
+      "width": 1277,
+      "height": 1947
     }
   ],
   "funnel": [
