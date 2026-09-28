@@ -80,6 +80,19 @@ export const services = [
       'Paid social support and reporting',
     ],
   },
+  {
+    n: '05',
+    title: 'Graphic Design',
+    icon: 'ph-palette',
+    blurb:
+      'The visual layer for everything above: posts, covers, banners and ad creative built to one look instead of five different ones.',
+    points: [
+      'Social posts, stories and covers',
+      'Ad and promo creative',
+      'Blog banners and LinkedIn graphics',
+      'Reusable Canva templates for your team',
+    ],
+  },
 ];
 
 export const testimonials = [

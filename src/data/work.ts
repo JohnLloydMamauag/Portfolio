@@ -54,4 +54,13 @@ export const galleries: Gallery[] = [
     highlights: ['Instagram creative', 'Video editing', 'Facebook covers', 'LinkedIn articles'],
     shots: shots['smm'] ?? [],
   },
+  {
+    id: 'graphic-design',
+    title: 'Graphic Design',
+    kind: 'Design · Brand assets',
+    icon: 'ph-palette',
+    blurb: 'Graphics built for the brands above: layouts, type and colour done in-house so a campaign ships without waiting on an outside designer.',
+    highlights: ['Social graphics', 'Covers & banners', 'Brand colour and type', 'Print-ready layouts'],
+    shots: shots['graphic-design'] ?? [],
+  },
 ];

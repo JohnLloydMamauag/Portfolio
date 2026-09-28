@@ -45,7 +45,8 @@ const schema = [
     lead={`Three areas of work, ${total} pieces straight out of the accounts I built them in. Open a card to page through the gallery.`}
   />
 
-  <ul class="grid">
+  <div class="rail-wrap" data-rail-wrap>
+  <ul class="rail" data-rail tabindex="0" aria-label="Work galleries">
     {
       galleries.map((g, i) => (
         <li>
@@ -112,6 +113,22 @@ const schema = [
     }
   </ul>
 
+    <button class="rail-nav rail-nav--prev" type="button" data-rail-prev aria-label="Previous">
+      <i class="ph-bold ph-caret-left" aria-hidden="true"></i>
+    </button>
+    <button class="rail-nav rail-nav--next" type="button" data-rail-next aria-label="Next">
+      <i class="ph-bold ph-caret-right" aria-hidden="true"></i>
+    </button>
+
+    <div class="rail-dots" data-rail-dots>
+      {
+        galleries.map((g, i) => (
+          <button type="button" data-rail-dot={i} aria-label={`Go to ${g.title}`} />
+        ))
+      }
+    </div>
+  </div>
+
   <section class="card cta reveal">
     <p><strong>Want something like this running in your business?</strong></p>
     <a class="btn" href="/contact"><i class="ph ph-paper-plane-tilt" aria-hidden="true"></i> Start a project</a>
@@ -124,15 +141,143 @@ const schema = [
   />
 </Base>
 
+<script>
+  // Bound on every navigation, since the ClientRouter runs this module once.
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLElement>('[data-rail-wrap]').forEach((wrap) => {
+      const rail = wrap.querySelector<HTMLElement>('[data-rail]');
+      const prev = wrap.querySelector<HTMLButtonElement>('[data-rail-prev]');
+      const next = wrap.querySelector<HTMLButtonElement>('[data-rail-next]');
+      const dots = [...wrap.querySelectorAll<HTMLButtonElement>('[data-rail-dot]')];
+      if (!rail || !prev || !next) return;
+
+      const cards = rail.children as HTMLCollectionOf<HTMLElement>;
+      // Distance from one card to the next, gap included.
+      const step = () =>
+        cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : rail.clientWidth;
+
+      const update = () => {
+        const max = rail.scrollWidth - rail.clientWidth;
+        wrap.classList.toggle('is-scrollable', max > 4);
+        prev.disabled = rail.scrollLeft <= 4;
+        next.disabled = rail.scrollLeft >= max - 4;
+
+        // A dot per scroll position, not per card: with three cards in view a
+        // four-card rail only has two places to stop.
+        const stops = Math.round(max / step()) + 1;
+        const here = Math.round(rail.scrollLeft / step());
+        dots.forEach((dot, i) => {
+          dot.hidden = i >= stops;
+          dot.setAttribute('aria-current', String(i === here));
+        });
+      };
+
+      prev.addEventListener('click', () => rail.scrollBy({ left: -step() }));
+      next.addEventListener('click', () => rail.scrollBy({ left: step() }));
+      dots.forEach((dot, i) =>
+        dot.addEventListener('click', () => rail.scrollTo({ left: i * step() })),
+      );
+
+      rail.addEventListener('scroll', update, { passive: true });
+      new ResizeObserver(update).observe(rail);
+      update();
+    });
+  });
+</script>
+
 <style>
-  .grid {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
-    gap: 1.25rem;
+  /*
+   * The cards sit on a horizontal snap rail rather than a wrapping grid, so a
+   * fourth (or fifth) gallery is a swipe away instead of a second row.
+   */
+  .rail-wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    min-width: 0;
   }
-  .grid li { display: flex; }
+
+  .rail {
+    --gap: 1.25rem;
+    list-style: none;
+    margin: 0;
+    /* Room for the cards' hover lift and shadow, which the scroll box clips. */
+    padding: .5rem .25rem .85rem;
+    display: flex;
+    gap: var(--gap);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  .rail::-webkit-scrollbar { display: none; }
+  .rail:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 14px; }
+
+  .rail > li {
+    flex: 0 0 min(86%, 340px);
+    scroll-snap-align: start;
+    display: flex;
+    min-width: 0;
+  }
+  @media (min-width: 720px) {
+    .rail > li { flex-basis: calc((100% - var(--gap)) / 2); }
+  }
+  @media (min-width: 1041px) {
+    .rail > li { flex-basis: calc((100% - 2 * var(--gap)) / 3); }
+  }
+
+  /* Arrows and dots only earn their space once the rail actually overflows. */
+  .rail-nav, .rail-dots { display: none; }
+  .rail-wrap.is-scrollable .rail-dots { display: flex; }
+
+  .rail-nav {
+    position: absolute;
+    top: calc(50% - 1.5rem);
+    z-index: 3;
+    width: 3rem;
+    height: 3rem;
+    display: none;
+    place-items: center;
+    border-radius: 999px;
+    /* The button straddles the pale card and the deep teal page behind it, so
+       it carries both a pale fill and a dark ring to read against either. */
+    border: 2px solid var(--g-900);
+    background: var(--g-100);
+    color: var(--g-900);
+    font-size: 1.35rem;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(2, 51, 54, .5);
+    transition: transform .2s ease, opacity .2s ease, background .2s ease;
+  }
+  .rail-nav:hover { background: var(--accent); transform: scale(1.08); }
+  .rail-nav:focus-visible { outline: 3px solid var(--g-100); outline-offset: 3px; }
+  .rail-nav[disabled] { opacity: .3; pointer-events: none; }
+  .rail-nav--prev { left: -1rem; }
+  .rail-nav--next { right: -1rem; }
+  @media (min-width: 900px) {
+    .rail-wrap.is-scrollable .rail-nav { display: grid; }
+  }
+
+  .rail-dots {
+    justify-content: center;
+    gap: .45rem;
+  }
+  .rail-dots button {
+    width: .5rem;
+    height: .5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: var(--border-strong);
+    cursor: pointer;
+    transition: width .25s ease, background .25s ease;
+  }
+  .rail-dots button[aria-current='true'] {
+    width: 1.5rem;
+    background: var(--accent);
+  }
 
   .work {
     display: flex;
@@ -241,19 +386,25 @@ const schema = [
       display: grid;
       grid-template-rows: auto minmax(0, 1fr) auto;
       gap: 1rem;
-      height: calc(100vh - 3.5rem);
+      /* min-height, not height: if the copy genuinely does not fit the window
+         the page grows and scrolls instead of slicing the cards. */
+      min-height: calc(100vh - 3.5rem);
     }
     .projects-page :global(.page-header) { padding-top: 0; gap: .35rem; }
     .projects-page :global(.page-header h1) { font-size: clamp(1.9rem, 2.2vw + .9rem, 2.6rem); }
     .projects-page :global(.page-header .lead) { font-size: 1rem; max-width: 78ch; }
 
-    .grid { min-height: 0; }
-    .grid li { min-height: 0; }
+    .rail-wrap { min-height: 0; }
+    .rail { min-height: 0; flex: 1 1 auto; }
+    .rail > li { min-height: 0; }
     .work { height: 100%; min-height: 0; gap: .7rem; }
 
-    /* The preview soaks up whatever height is left over. */
-    .work__shots { flex: 1 1 auto; height: auto; min-height: 90px; margin-bottom: 0; }
+    /* Only the preview flexes. The text blocks hold their natural height so
+       the leftover space is taken out of the screenshots, never out of a
+       half-cut line of copy. */
+    .work__shots { flex: 1 1 0; height: auto; min-height: 84px; margin-bottom: 0; }
     .work__shots img { height: 88%; top: calc(var(--n) * 8px); }
+    .card-head, .work__blurb, .work__tags, .work__cta { flex: 0 0 auto; }
 
     .work__blurb {
       display: -webkit-box;
@@ -261,12 +412,15 @@ const schema = [
       -webkit-box-orient: vertical;
       overflow: hidden;
       font-size: .9rem;
+      line-height: 1.55;
+      /* Exactly three lines, so the clamp lands on a baseline. */
+      max-height: calc(1.55em * 3);
     }
-    .work__tags { max-height: 4.4rem; overflow: hidden; }
     .work__cta { padding-top: .65rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .work__shots img, .work__arrow { transition: none; }
+    .rail { scroll-behavior: auto; }
   }
 </style>

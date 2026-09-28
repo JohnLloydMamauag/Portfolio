@@ -16,10 +16,11 @@ const SOURCES = [
   path.join(ROOT, 'GHL workflows'),
   path.join(ROOT, 'New Workflow'),
   path.join(ROOT, 'GHLand SMM samples'),
+  path.join(ROOT, 'port-graphics'),
 ];
 const OUT_DIR = path.join(ROOT, 'public', 'work');
 
-const CATEGORIES = ['ghl-automation', 'funnel', 'smm'];
+const CATEGORIES = ['ghl-automation', 'funnel', 'smm', 'graphic-design'];
 
 /**
  * Re-shot workflows. "New Workflow" holds fresher captures of screens that
@@ -42,6 +43,9 @@ const SUPERSEDED = new Set([
   'Won Clent Move to (Review) Pipeline.png',
 ]);
 
+/** Graphics that already ship on the SMM card. */
+const SMM_ALSO = new Set(['Black and Lime Green Modern Fitness Coaching Instagram Post (1).png']);
+
 /**
  * Funnel pages, listed in the order the gallery should walk through them:
  * the opt-in funnel front to back, then the paid order form.
@@ -60,6 +64,8 @@ const FUNNEL_ORDER = [
 
 function categorise(folder, file) {
   if (FUNNEL_ORDER.includes(file)) return 'funnel';
+  // Canva template names in here read as social posts, so the folder decides.
+  if (/port-graphics/i.test(folder)) return 'graphic-design';
   if (/New Workflow/i.test(folder)) return 'ghl-automation';
   if (/GHL workflows/i.test(folder)) return 'ghl-automation';
   if (/instagram|facebook|fb\.|linkedin|blog|cover|post/i.test(file)) return 'smm';
@@ -100,6 +106,18 @@ const CAPTIONS = {
   'Workflow Missed Call Text Back Automation': 'Missed Call Text Back Automation',
   'Workflow New Leads Automation': 'New Leads Automation',
   'Workflow Stale Opportunity Automation': 'Stale Opportunity Automation',
+  // Graphic design pieces, renamed off their Canva template titles.
+  '3': 'Fitness Coaching Ad Banner',
+  'Untitled design': 'Business Builder vs Bottleneck Graphic',
+  'Blue Illustrated Boss Day Card': 'Boss Day Greeting Card',
+  'Blue and Pink Gradient Tech Instagram Story': 'Gradient Tech Instagram Story',
+  'Computer Screen Online Shopping Instagram Post': 'Online Shopping Instagram Post',
+  'Dark Blue And Black Modern Financial Advisor Facebook Cover': 'Financial Advisor Facebook Cover',
+  'Modern Sporty Fitness and Gym Instagram Post': 'Fitness and Gym Instagram Post',
+  'Red Modern Business Quote Instagram Post Portrait': 'Business Quote Instagram Post',
+  'Yellow Blue Modern Gym Fitness Blog Banner': 'Gym Fitness Blog Banner',
+  'Yellow Illustrated Marketing Is Important LinkedIn Post': 'Marketing LinkedIn Post',
+  'purple and orange profesional business webinar instagram post': 'Business Webinar Instagram Post',
 };
 
 function toCaption(file) {
@@ -150,9 +168,13 @@ const buckets = new Map(CATEGORIES.map((id) => [id, []]));
 
 for (const dir of SOURCES) {
   const isOldWorkflows = /GHL workflows/i.test(dir);
+  const isGraphics = /port-graphics/i.test(dir);
   const files = (await readdir(dir))
     .filter((f) => /\.(png|jpe?g|webp)$/i.test(f))
-    .filter((f) => !(isOldWorkflows && SUPERSEDED.has(f)));
+    .filter((f) => !(isOldWorkflows && SUPERSEDED.has(f)))
+    // A couple of graphics also live in the SMM folder; they stay on the SMM
+    // card so the same image does not show up under two headings.
+    .filter((f) => !(isGraphics && SMM_ALSO.has(f)));
   for (const file of files) {
     const id = categorise(dir, file);
     const slug = slugify(file);

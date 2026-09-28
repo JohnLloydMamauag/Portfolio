@@ -272,5 +272,84 @@
       "width": 763,
       "height": 768
     }
+  ],
+  "graphic-design": [
+    {
+      "src": "/work/graphic-design/blue-illustrated-boss-day-card.webp",
+      "thumb": "/work/graphic-design/blue-illustrated-boss-day-card-thumb.webp",
+      "caption": "Boss Day Greeting Card",
+      "width": 1748,
+      "height": 1240
+    },
+    {
+      "src": "/work/graphic-design/untitled-design-3.webp",
+      "thumb": "/work/graphic-design/untitled-design-3-thumb.webp",
+      "caption": "Business Builder vs Bottleneck Graphic",
+      "width": 1920,
+      "height": 1080
+    },
+    {
+      "src": "/work/graphic-design/red-modern-business-quote-instagram-post-portrait.webp",
+      "thumb": "/work/graphic-design/red-modern-business-quote-instagram-post-portrait-thumb.webp",
+      "caption": "Business Quote Instagram Post",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "src": "/work/graphic-design/purple-and-orange-profesional-business-webinar-instagram-post.webp",
+      "thumb": "/work/graphic-design/purple-and-orange-profesional-business-webinar-instagram-post-thumb.webp",
+      "caption": "Business Webinar Instagram Post",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "src": "/work/graphic-design/dark-blue-and-black-modern-financial-advisor-facebook-cover.webp",
+      "thumb": "/work/graphic-design/dark-blue-and-black-modern-financial-advisor-facebook-cover-thumb.webp",
+      "caption": "Financial Advisor Facebook Cover",
+      "width": 1640,
+      "height": 924
+    },
+    {
+      "src": "/work/graphic-design/modern-sporty-fitness-and-gym-instagram-post.webp",
+      "thumb": "/work/graphic-design/modern-sporty-fitness-and-gym-instagram-post-thumb.webp",
+      "caption": "Fitness and Gym Instagram Post",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "src": "/work/graphic-design/3.webp",
+      "thumb": "/work/graphic-design/3-thumb.webp",
+      "caption": "Fitness Coaching Ad Banner",
+      "width": 1000,
+      "height": 523
+    },
+    {
+      "src": "/work/graphic-design/blue-and-pink-gradient-tech-instagram-story.webp",
+      "thumb": "/work/graphic-design/blue-and-pink-gradient-tech-instagram-story-thumb.webp",
+      "caption": "Gradient Tech Instagram Story",
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "src": "/work/graphic-design/yellow-blue-modern-gym-fitness-blog-banner.webp",
+      "thumb": "/work/graphic-design/yellow-blue-modern-gym-fitness-blog-banner-thumb.webp",
+      "caption": "Gym Fitness Blog Banner",
+      "width": 2240,
+      "height": 1260
+    },
+    {
+      "src": "/work/graphic-design/yellow-illustrated-marketing-is-important-linkedin-post-1.webp",
+      "thumb": "/work/graphic-design/yellow-illustrated-marketing-is-important-linkedin-post-1-thumb.webp",
+      "caption": "Marketing LinkedIn Post",
+      "width": 1200,
+      "height": 1200
+    },
+    {
+      "src": "/work/graphic-design/computer-screen-online-shopping-instagram-post-1.webp",
+      "thumb": "/work/graphic-design/computer-screen-online-shopping-instagram-post-1-thumb.webp",
+      "caption": "Online Shopping Instagram Post",
+      "width": 1080,
+      "height": 1080
+    }
   ]
 }
